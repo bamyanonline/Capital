@@ -1,0 +1,50 @@
+<!doctype html>
+<html dir="rtl" lang="fa"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>CAPITAL | Profile</title><link href="assets/style.css" rel="stylesheet"/></head><body><div class="app"><main class="container profile-page" data-page-main="true">
+<section class="hero profile profile-hero">
+<div class="profile-identity">
+<div aria-hidden="true" class="profile-avatar-icon"><svg viewbox="0 0 24 24"><circle cx="12" cy="8" fill="none" r="3.5" stroke="currentColor" stroke-width="1.8"></circle><path d="M5 20c.8-3.4 3.2-5.2 7-5.2s6.2 1.8 7 5.2" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.8"></path></svg></div>
+<div class="profile-identity-copy">
+<h1 data-profile-name="">محمد رضا</h1>
+<div class="profile-email" data-user-email="">user@example.com</div>
+</div>
+</div>
+<div class="profile-referral-card">
+<div class="profile-user-id"><span data-t="userId">شناسه کاربر</span><strong class="profile-referral-id" data-user-referral="">—</strong></div>
+<div class="profile-invite">
+<span data-t="inviteLink">لینک دعوت</span>
+<button data-action="copyInviteLink" data-action-args="" data-t="copyInvite" type="button">کپی لینک دعوت</button>
+</div>
+</div>
+<div class="profile-team-stats">
+<div><span data-t="directMembers">زیرمجموعه‌های مستقیم</span><strong data-profile-direct-members="">0</strong></div>
+<div><span data-t="teamMembers">کل اعضای تیم</span><strong data-profile-team-members="">0</strong></div>
+</div>
+</section>
+<section><h2 class="section-title">💳 <span data-t="financialManagement">مدیریت مالی</span></h2><div class="form profile-section">
+<div class="profile-row"><span>شبکه برداشت</span><strong>TRC20</strong></div>
+<label for="profileWalletAddress">آدرس کیف پول برداشت</label>
+<input autocomplete="off" id="profileWalletAddress" placeholder="آدرس کیف پول TRC20 را وارد کنید" type="text"/>
+<div class="permanent-warning"><strong>⚠️ توجه مهم درباره آدرس برداشت</strong><p>لطفاً آدرس کیف پول را با دقت کامل وارد و بررسی کنید. پس از ثبت و تأیید، این آدرس به‌صورت دائمی ذخیره می‌شود و امکان تغییر آن وجود نخواهد داشت.</p></div>
+<button class="btn" data-action="saveProfileWallet" data-action-args="" id="saveProfileWallet" type="button">ثبت دائمی آدرس برداشت</button>
+<div class="profile-row"><span>وضعیت آدرس</span><strong id="profileWalletStatus">ثبت نشده</strong></div>
+</div></section>
+<section><h2 class="section-title">🔐 <span data-t="securitySection">امنیت</span></h2><div class="form profile-section"><a class="profile-option" data-t="changePassword" href="change-password.html">🔐 تغییر رمز عبور</a></div></section>
+<section><h2 class="section-title">🌐 <span data-t="language">زبان</span></h2><div class="form profile-section"><select aria-label="Language" class="lang profile-language" id="language" onchange="selectLang()"><option value="en">🇬🇧 English</option><option value="fr">🇫🇷 Français</option><option value="ru">🇷🇺 Русский</option><option value="zh">🇨🇳 中文</option><option value="ar">🇸🇦 العربية</option><option value="ur">🇵🇰 اردو</option><option value="fa">🇮🇷 فارسی</option></select></div></section>
+<section class="profile-contact-section">
+<h2 class="section-title">💬 <span data-t="contactUs">تماس با ما</span></h2>
+<div class="form profile-section profile-contact-card">
+<p class="profile-contact-note" data-t="contactUsNote">برای ارتباط با مدیریت، یکی از راه‌های زیر را انتخاب کنید.</p>
+<div class="profile-contact-actions">
+<a aria-label="Telegram" class="profile-contact-item" href="https://t.me/" rel="noopener noreferrer" target="_blank">
+<span class="profile-contact-icon"><img alt="Telegram" src="assets/telegram-turquoise.svg"/></span>
+<span><strong>Telegram</strong><small data-t="telegramContact">ارتباط در تلگرام</small></span>
+</a>
+<a aria-label="WhatsApp" class="profile-contact-item" href="https://wa.me/" rel="noopener noreferrer" target="_blank">
+<span class="profile-contact-icon"><img alt="WhatsApp" src="assets/whatsapp-turquoise.svg"/></span>
+<span><strong>WhatsApp</strong><small data-t="whatsappContact">ارتباط در واتساپ</small></span>
+</a>
+</div>
+</div>
+</section>
+<section class="profile-logout"><button class="btn" data-action="logout" data-action-args="" type="button">🚪 خروج از حساب</button></section>
+</main></div><div class="toast"></div><script src="assets/api.js"></script><script src="assets/i18n.js"></script><script src="assets/layout.js"></script><script src="assets/app.js"></script></body></html>

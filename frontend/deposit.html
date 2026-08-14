@@ -1,0 +1,23 @@
+<!doctype html>
+<html dir="rtl" lang="fa"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>CAPITAL | Deposit</title><link href="assets/style.css" rel="stylesheet"/></head><body><div class="app"><main class="container" data-page-main="true">
+<section class="hero"><h1 data-t="deposit">واریز</h1><p data-t="depositIntro">فقط از شبکه <strong data-deposit-network>TRC20</strong> استفاده کنید و پیش از ارسال، شبکه را با دقت بررسی نمایید.</p></section>
+<section class="form">
+<div class="qr deposit-qr" aria-label="QR code for deposit"><img id="depositQrImage" alt="USDT Deposit QR Code" decoding="async" loading="lazy" src="assets/deposit-qr.jpg"/></div>
+<label data-t="network">شبکه</label>
+<select aria-label="Deposit network" id="depositNetwork">
+<option selected="" value="TRC20">TRC20 — USDT</option>
+</select>
+<label data-t="address" for="depositAddress">آدرس واریز</label>
+<input id="depositAddress" readonly="" value="TFLkxFWGRQqS8rdiEbPFPqWrbke7fssf5c"/>
+<button class="btn" data-action="copyAddress" data-action-args="" data-t="copy">کپی آدرس</button>
+<div class="note danger-note" data-t="networkWarning">⚠️ بسیار مهم: این آدرس فقط برای USDT روی شبکه <span data-deposit-network>TRC20</span> است. پیش از تأیید تراکنش، شبکه را در کیف پول مبدأ دقیقاً روی TRC20 قرار دهید. انتخاب شبکه اشتباه ممکن است باعث از دست رفتن دارایی شود.</div>
+<div class="note" data-t="min">حداقل واریز: ۱۰۰ USDT</div>
+<div class="deposit-confirm">
+<label for="depositAmount">مبلغ واریز (USDT)</label>
+<input aria-label="Deposit amount" id="depositAmount" inputmode="decimal" min="100" placeholder="مبلغ واریز را وارد کنید" step="0.01" type="number"/>
+<label for="depositTxid">شناسه تراکنش (TXID)</label>
+<input aria-label="Transaction TXID" autocomplete="off" id="depositTxid" inputmode="text" placeholder="TXID تراکنش مالی را اینجا وارد کنید" type="text"/>
+<button class="btn" data-action="submitDeposit" data-action-args="" type="button">ثبت واریز</button>
+</div>
+</section>
+</main></div><div class="toast"></div><script src="assets/api.js"></script><script src="assets/i18n.js"></script><script src="assets/layout.js"></script><script src="assets/app.js"></script></body></html>

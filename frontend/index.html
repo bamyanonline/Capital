@@ -1,0 +1,22 @@
+<!doctype html>
+<html dir="ltr" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>CAPITAL | Login</title><link href="assets/style.css" rel="stylesheet"/></head><body><main class="login"><section class="login-box">
+<div aria-label="CAPITAL logo" class="login-logo-wrap login-brand"><img alt="CAPITAL" class="login-logo" src="assets/logo-login-v7.webp"/></div>
+<div class="login-title">CAPITAL</div>
+<div class="login-language">
+<select aria-label="Language" class="lang" id="language" onchange="selectLang()">
+<option value="en">🇬🇧 English</option>
+<option value="fr">🇫🇷 Français</option>
+<option value="ru">🇷🇺 Русский</option>
+<option value="zh">🇨🇳 中文</option>
+<option value="ar">🇸🇦 العربية</option>
+<option value="ur">🇵🇰 اردو</option>
+<option value="fa">🇮🇷 فارسی</option>
+</select>
+</div>
+<form data-action-form="login" onsubmit="login(event)">
+<label data-t="email" for="loginEmail">ایمیل</label><input autocomplete="email" id="loginEmail" name="email" required="" type="email"/>
+<label data-t="password" for="loginPassword">رمز عبور</label><input autocomplete="current-password" id="loginPassword" name="password" required="" type="password"/>
+<button class="btn" data-t="login">ورود</button>
+</form>
+<div class="links"><a data-t="register" href="register.html">ثبت نام</a><a href="home.html?preview=1">مشاهده صفحات</a></div>
+</section></main><script src="assets/api.js"></script><script src="assets/i18n.js"></script><script src="assets/app.js"></script></body></html>
