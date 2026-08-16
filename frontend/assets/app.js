@@ -213,7 +213,9 @@ async function init(){
   if(!publicPages.includes(p)&&!previewMode&&!(await CapitalAPI.isAuthenticated())){location.replace("index.html");return}
   tr();newSecurity();newRegisterSecurity();setupRegisterSecurity();
   if(!previewMode) startSession();
-  document.querySelectorAll(".bottom a").forEach(a=>a.classList.toggle("active",a.getAttribute("href")===p));
+  // Navigation active-state is owned by the shared layout shell.
+  // Keep this defensive call for pages that are initialized asynchronously.
+  window.CapitalLayout?.setActiveNav?.();
   if(await CapitalAPI.isAuthenticated()) await refreshUserUI();
   await loadProfileWallet();
   setupDeposit();

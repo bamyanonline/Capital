@@ -26,27 +26,68 @@
   <a href="about.html"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.7" fill="none" stroke="currentColor" stroke-width="1.9"/><path d="M12 10.2v6.1" stroke="currentColor" stroke-width="1.9"/><circle cx="12" cy="7.3" r="1.05" fill="currentColor"/></svg></span><b data-t="about">درباره ما</b></a>
 </nav>`;
 
+  const NAV_PAGES = new Set(["home.html", "plans.html", "history.html", "market.html", "about.html"]);
+
+  function normalizePagePath(pathname) {
+    let path = String(pathname || "").split("?")[0].split("#")[0];
+    try { path = decodeURIComponent(path); } catch (_) {}
+    path = path.replace(/\/+$/, "");
+    if (!path || path === "/") return "home.html";
+
+    const page = path.split("/").pop() || "";
+    if (NAV_PAGES.has(page)) return page;
+
+    // Cloudflare Pages can expose static HTML through extensionless URLs.
+    const extensionless = page && !page.includes(".") ? `${page}.html` : page;
+    return NAV_PAGES.has(extensionless) ? extensionless : page;
+  }
+
+  function setActiveNav() {
+    const nav = document.querySelector(".bottom");
+    if (!nav) return;
+
+    const current = normalizePagePath(window.location.pathname);
+    nav.querySelectorAll("a[href]").forEach(link => {
+      let target = "";
+      try {
+        target = normalizePagePath(new URL(link.getAttribute("href"), window.location.href).pathname);
+      } catch (_) {
+        target = normalizePagePath(link.getAttribute("href"));
+      }
+      const active = NAV_PAGES.has(target) && target === current;
+      link.classList.toggle("active", active);
+      if (active) link.setAttribute("aria-current", "page");
+      else link.removeAttribute("aria-current");
+    });
+  }
+
   function mount() {
     const app = document.querySelector(".app");
     const main = document.querySelector("main[data-page-main], main.container");
-    if (!app || !main || app.dataset.shellMounted === "1") return;
+    if (!app || !main) return;
 
-    app.dataset.shellMounted = "1";
-    const existingHeader = app.querySelector(":scope > .top");
-    const existingNav = app.querySelector(":scope > .bottom");
+    if (app.dataset.shellMounted !== "1") {
+      app.dataset.shellMounted = "1";
+      const existingHeader = app.querySelector(":scope > .top");
+      const existingNav = app.querySelector(":scope > .bottom");
 
-    if (!existingHeader) app.insertAdjacentHTML("afterbegin", HEADER);
-    if (!existingNav) app.insertAdjacentHTML("beforeend", NAV);
+      if (!existingHeader) app.insertAdjacentHTML("afterbegin", HEADER);
+      if (!existingNav) app.insertAdjacentHTML("beforeend", NAV);
 
-    // Normalize page structure without changing the page's content/classes.
-    if (main.parentElement !== app) app.appendChild(main);
+      // Normalize page structure without changing the page's content/classes.
+      if (main.parentElement !== app) app.appendChild(main);
 
-    let toast = app.querySelector(":scope > .toast");
-    if (!toast) {
-      toast = document.createElement("div");
-      toast.className = "toast";
-      app.appendChild(toast);
+      let toast = app.querySelector(":scope > .toast");
+      if (!toast) {
+        toast = document.createElement("div");
+        toast.className = "toast";
+        app.appendChild(toast);
+      }
     }
+
+    // Active state belongs to the shared navigation shell so every page uses
+    // exactly the same route-matching logic, independent of page-specific JS.
+    setActiveNav();
   }
 
   if (document.readyState === "loading") {
@@ -54,5 +95,6 @@
   } else {
     mount();
   }
-  window.CapitalLayout = { mount };
+  window.addEventListener("popstate", setActiveNav);
+  window.CapitalLayout = { mount, setActiveNav, normalizePagePath };
 })();
