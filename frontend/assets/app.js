@@ -126,6 +126,13 @@ async function changeProfilePassword(){const c=document.querySelector("#currentP
 function newSecurity(){securityN=Math.floor(Math.random()*8)+2;securityM=Math.floor(Math.random()*8)+2;const q=document.querySelector("#securityQ");if(q)q.textContent=`${securityN} + ${securityM} = ?`}
 let securityN=0,securityM=0,registerSecurityN=0,registerSecurityM=0;
 function newRegisterSecurity(){registerSecurityN=Math.floor(Math.random()*9)+1;registerSecurityM=Math.floor(Math.random()*9)+1;const q=document.querySelector("#registerSecurityQ");if(q)q.textContent=`${registerSecurityN} + ${registerSecurityM} = ?`}
+function setupRegisterSecurity(){
+  const card=document.querySelector("#registerSecurityCard"), q=document.querySelector("#registerSecurityQ"), a=document.querySelector("#registerSecurityA");
+  if(!card||!q||!a)return;
+  const showAnswer=()=>{card.classList.add("is-answering");requestAnimationFrame(()=>a.focus())};
+  q.addEventListener("click",showAnswer);
+  a.addEventListener("blur",()=>{if(!a.value.trim())card.classList.remove("is-answering")});
+}
 function forgotPassword(e){e.preventDefault();toast(runtimeText("بازیابی رمز عبور پس از اتصال Backend فعال می‌شود."));newSecurity()}
 function startSession(){let timer;const reset=()=>{clearTimeout(timer);timer=setTimeout(async()=>{if(await CapitalAPI.isAuthenticated()){await CapitalAPI.logout();if(!location.pathname.endsWith("index.html")&&location.pathname!=="/")location.href="index.html"}},CAPITAL_CONFIG.sessionMinutes*60*1000)};["click","touchstart","mousemove","keydown","scroll"].forEach(x=>addEventListener(x,reset,{passive:true}));reset()}
 async function submitDeposit(){
@@ -204,7 +211,7 @@ async function init(){
   if(previewRequested) sessionStorage.setItem("capitalPreviewMode","1");
   const previewMode=sessionStorage.getItem("capitalPreviewMode")==="1";
   if(!publicPages.includes(p)&&!previewMode&&!(await CapitalAPI.isAuthenticated())){location.replace("index.html");return}
-  tr();newSecurity();newRegisterSecurity();
+  tr();newSecurity();newRegisterSecurity();setupRegisterSecurity();
   if(!previewMode) startSession();
   document.querySelectorAll(".bottom a").forEach(a=>a.classList.toggle("active",a.getAttribute("href")===p));
   if(await CapitalAPI.isAuthenticated()) await refreshUserUI();

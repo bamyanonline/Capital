@@ -1,5 +1,19 @@
 <!doctype html>
 <html dir="rtl" lang="fa"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>CAPITAL | Register</title><link href="assets/style.css" rel="stylesheet"/></head><body class="register-page"><div class="app"><main class="container" data-page-main="true">
 <section class="hero"><h1 data-t="register">ثبت نام</h1></section>
-<section class="form"><form onsubmit="register(event)"><label for="registerName">نام</label><input autocomplete="given-name" id="registerName" name="name" required=""/><label for="registerFamily">نام خانوادگی</label><input autocomplete="family-name" id="registerFamily" name="family" required=""/><label data-t="email" for="registerEmail">ایمیل</label><input autocomplete="email" id="registerEmail" name="email" required="" type="email"/><label data-t="password" for="password">رمز عبور</label><input autocomplete="new-password" id="password" name="password" required="" type="password"/><label data-t="confirm" for="confirm">تکرار رمز عبور</label><input autocomplete="new-password" id="confirm" name="confirmPassword" required="" type="password"/><label data-t="security">سوال امنیتی</label><div aria-live="polite" id="registerSecurityQ"></div><label class="sr-only" for="registerSecurityA">پاسخ سؤال امنیتی</label><input aria-label="Security answer" autocomplete="off" id="registerSecurityA" inputmode="numeric" name="securityAnswer" required="" type="number"/><label data-t="referralCode" for="registerReferral">کد دعوت</label><input autocomplete="off" id="registerReferral" name="referredBy" type="text" maxlength="20"/><button class="btn" data-t="submit">ثبت</button></form></section>
+<section class="form"><form onsubmit="register(event)">
+<div class="register-grid">
+<div class="register-field"><label for="registerName">نام</label><input autocomplete="given-name" id="registerName" name="name" required=""/></div>
+<div class="register-field"><label for="registerFamily">نام خانوادگی</label><input autocomplete="family-name" id="registerFamily" name="family" required=""/></div>
+</div>
+<div class="register-field register-full"><label data-t="email" for="registerEmail">ایمیل</label><input autocomplete="email" id="registerEmail" name="email" required="" type="email"/></div>
+<div class="register-grid">
+<div class="register-field"><label data-t="password" for="password">رمز عبور</label><input autocomplete="new-password" id="password" name="password" required="" type="password"/></div>
+<div class="register-field"><label data-t="confirm" for="confirm">تکرار رمز عبور</label><input autocomplete="new-password" id="confirm" name="confirmPassword" required="" type="password"/></div>
+</div>
+<div class="register-grid">
+<div class="register-field register-security-field"><label data-t="security">سوال امنیتی</label><div class="register-security-card" id="registerSecurityCard" aria-live="polite"><button type="button" id="registerSecurityQ" class="register-security-question" aria-label="برای وارد کردن پاسخ کلیک کنید"></button><label class="sr-only" for="registerSecurityA">پاسخ سؤال امنیتی</label><input aria-label="پاسخ سؤال امنیتی" autocomplete="off" id="registerSecurityA" inputmode="numeric" name="securityAnswer" required="" type="number"/></div></div>
+<div class="register-field"><label data-t="referralCode" for="registerReferral">کد دعوت</label><input autocomplete="off" id="registerReferral" name="referredBy" type="text" maxlength="20"/></div>
+</div>
+<button class="btn" data-t="submit">ثبت</button></form></section>
 </main><div class="toast"></div></div><script src="assets/api.js"></script><script src="assets/i18n.js"></script><script src="assets/app.js"></script></body></html>

@@ -213,6 +213,31 @@ button,input,select,textarea{
 .permanent-warning{margin:9px 0}
 
 
+/* v1: Profile KYC card — isolated to Profile page only. */
+.profile-kyc-upload-title{
+  margin:13px 0 7px;
+  font-size:12px;
+  font-weight:800;
+  color:var(--turq2);
+}
+.profile-section input[type="file"]{
+  width:100%;
+  flex:none;
+  padding:9px;
+  border:1px solid var(--line);
+  border-radius:11px;
+  background:#fff;
+  color:var(--muted);
+  font-size:12px;
+}
+.profile-kyc-status{
+  margin-top:10px;
+  padding-top:11px;
+}
+.profile-kyc-status strong{
+  color:var(--muted);
+}
+
 /* CAPITAL History page — isolated styles */
 .history-page{padding-bottom:105px}
 .history-page .hero{text-align:center;margin-bottom:18px}
@@ -1888,4 +1913,94 @@ input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px soli
 }
 .withdraw-home-btn:hover{
   box-shadow:0 10px 22px rgba(21,128,61,.26),inset 0 1px 0 rgba(255,255,255,.32)!important;
+}
+
+
+/* Register compact two-column field layout — register page only */
+.register-page .register-grid{
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:var(--site-gap)!important;
+  width:100%!important;
+  margin:0!important;
+}
+.register-page .register-field{
+  display:flex!important;
+  flex-direction:column!important;
+  gap:var(--site-gap)!important;
+  min-width:0!important;
+  margin:0!important;
+}
+.register-page .register-field label{margin:0!important;padding:0!important}
+.register-page .register-field input{margin:0!important;min-width:0!important;box-sizing:border-box!important}
+.register-page .register-full{width:100%!important}
+.register-page .register-security-card{
+  width:100%!important;
+  min-height:42px!important;
+  height:42px!important;
+  padding:10px!important;
+  box-sizing:border-box!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  position:relative!important;
+  color:var(--ink)!important;
+  background:#fff!important;
+  border:1px solid var(--line)!important;
+  border-radius:11px!important;
+  box-shadow:none!important;
+  overflow:hidden!important;
+}
+.register-page #registerSecurityQ{
+  width:100%!important;
+  height:100%!important;
+  min-height:0!important;
+  margin:0!important;
+  padding:0!important;
+  border:0!important;
+  background:transparent!important;
+  color:var(--muted)!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+  font:inherit!important;
+  font-size:14px!important;
+  font-weight:700!important;
+  cursor:text!important;
+  transition:opacity .18s ease,transform .18s ease!important;
+}
+.register-page #registerSecurityQ:focus{outline:none!important}
+.register-page .register-security-card.is-answering #registerSecurityQ{
+  opacity:0!important;
+  transform:scale(.96)!important;
+  pointer-events:none!important;
+  position:absolute!important;
+}
+.register-page .register-security-card #registerSecurityA{
+  width:100%!important;
+  height:100%!important;
+  min-height:0!important;
+  margin:0!important;
+  padding:0 8px!important;
+  box-sizing:border-box!important;
+  border:0!important;
+  outline:none!important;
+  background:transparent!important;
+  color:var(--text)!important;
+  text-align:center!important;
+  font:inherit!important;
+  font-size:14px!important;
+  font-weight:700!important;
+  opacity:0!important;
+  pointer-events:none!important;
+  box-shadow:none!important;
+  transition:opacity .18s ease!important;
+}
+.register-page .register-security-card.is-answering #registerSecurityA{
+  opacity:1!important;
+  pointer-events:auto!important;
+}
+@media(max-width:360px){
+  .register-page .register-grid{gap:8px!important}
 }
