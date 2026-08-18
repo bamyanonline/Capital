@@ -309,12 +309,3 @@ document.addEventListener("DOMContentLoaded",init);
   else bind();
   new MutationObserver(bind).observe(document.documentElement,{childList:true,subtree:true});
 })();
-
-/* CAPITAL v2 — English-digit invariant across every language. */
-(function(){
-  const normalize=v=>String(v??'').replace(/[۰-۹]/g,d=>'0123456789'['۰۱۲۳۴۵۶۷۸۹'.indexOf(d)]).replace(/[٠-٩]/g,d=>'0123456789'['٠١٢٣٤٥٦٧٨٩'.indexOf(d)]);
-  const scan=root=>{const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT),a=[];while(w.nextNode())a.push(w.currentNode);a.forEach(n=>{if(n.parentElement&&!/^(SCRIPT|STYLE)$/i.test(n.parentElement.tagName))n.nodeValue=normalize(n.nodeValue)});document.querySelectorAll('input,textarea,option').forEach(e=>{if('value' in e)e.value=normalize(e.value);if(e.textContent)e.textContent=normalize(e.textContent)})};
-  window.addEventListener('load',()=>scan(document.body));
-  document.addEventListener('capital:language',()=>requestAnimationFrame(()=>scan(document.body)));
-  new MutationObserver(()=>scan(document.body)).observe(document.body,{subtree:true,childList:true,characterData:true});
-})();

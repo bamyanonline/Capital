@@ -17,8 +17,6 @@ window.CAPITAL_CONFIG = window.CAPITAL_CONFIG || {
   sessionMinutes: 30
 };
 
-
-(async()=>{try{if(window.CAPITAL_CONFIG?.mode==='backend'){const r=await fetch((window.CAPITAL_CONFIG.apiBaseUrl||'')+'/api/config',{credentials:'same-origin'});if(r.ok){const j=await r.json();if(j.data){window.CAPITAL_CONFIG.deposit={...window.CAPITAL_CONFIG.deposit,...(j.data.deposit||{})};window.CAPITAL_CONFIG.withdrawal={...window.CAPITAL_CONFIG.withdrawal,...(j.data.withdrawal||{})};window.CAPITAL_CONFIG.plans=j.data.plans||window.CAPITAL_CONFIG.plans;window.CAPITAL_CONFIG.sessionMinutes=j.data.sessionMinutes||window.CAPITAL_CONFIG.sessionMinutes;window.dispatchEvent(new CustomEvent('capital:config',{detail:j.data}))}}}}catch(_){}})();
 (function () {
   const KEY = "capitalMockDB";
   const SESSION = "capitalSession";
