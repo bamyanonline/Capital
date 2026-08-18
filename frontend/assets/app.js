@@ -60,7 +60,7 @@ async function login(e){
   e.preventDefault();
   const form=e.target, email=(form.querySelector('input[type="email"]')?.value||"").trim().toLowerCase(), password=form.querySelector('input[type="password"]')?.value||"";
   if(!email||!password)return;
-  try{const user=await CapitalAPI.login(email,password);localStorage.setItem("capitalEmail",email);window.__capitalUser=user;location.href="home.html"}
+  try{const user=await CapitalAPI.login(email,password);localStorage.setItem("capitalEmail",email);window.__capitalUser=user;location.href="assets.html"}
   catch(err){toast(uiError(err))}
 }
 async function register(e){
@@ -74,7 +74,7 @@ async function register(e){
   try{
     const referralFrom=(new URLSearchParams(location.search).get("ref")||"").trim();
     const user=await CapitalAPI.register({name,family,email,password:a,referredBy:referralFrom});
-    localStorage.setItem("capitalEmail",email);window.__capitalUser=user;location.href="home.html";
+    localStorage.setItem("capitalEmail",email);window.__capitalUser=user;location.href="assets.html";
   }catch(err){toast(uiError(err))}
 }
 async function logout(){try{await CapitalAPI.logout()}finally{location.href="index.html"}}
@@ -92,7 +92,7 @@ async function refreshUserUI(){
 }
 function localeForLanguage(){return ({fa:"fa-IR",ar:"ar-SA",ur:"ur-PK",en:"en-US",fr:"fr-FR",ru:"ru-RU",zh:"zh-CN"}[langCode()]||"en-US")}
 function money(v){return Number(v||0).toFixed(2)+" USDT"}
-function renderDashboard(d){if(!d)return;const map={invested:d.investedCapital,daily:d.dailyProfit,team:d.teamProfit,total:d.totalProfit,available:d.available,withdrawals:d.totalWithdrawals};Object.entries(map).forEach(([k,v])=>document.querySelectorAll(`[data-dashboard="${k}"]`).forEach(e=>e.textContent=money(v)))}
+function renderDashboard(d){if(!d)return;const map={invested:d.investedCapital,daily:d.dailyProfit,team:d.teamProfit,total:d.totalProfit,available:d.available,withdrawals:d.totalWithdrawals,referralReward:d.referralReward??d.referralIncome??0,otherRewards:d.otherRewards??0};Object.entries(map).forEach(([k,v])=>document.querySelectorAll(`[data-dashboard="${k}"]`).forEach(e=>e.textContent=money(v)))}
 function renderVip(user,dash){
   const vip=activeVip(user), email=user?.email||currentEmail()||"—", deposit=Number(dash?.balance ?? user?.balance ?? 0);
   document.querySelectorAll("[data-user-email]").forEach(e=>e.textContent=email);
@@ -204,7 +204,7 @@ document.addEventListener("capital:language",()=>{
 if(!localStorage.getItem("capitalLang")) localStorage.setItem("capitalLang","en");
 
 async function init(){
-  const p=location.pathname.split("/").pop()||"home.html";
+  const p=location.pathname.split("/").pop()||"assets.html";
   const publicPages=["index.html","register.html",""];
   const params=new URLSearchParams(location.search);
   const previewRequested=params.get("preview")==="1";
@@ -249,29 +249,29 @@ document.addEventListener("DOMContentLoaded",init);
 })();
 
 
-/* CAPITAL v7 — Home financial action sizing.
+/* CAPITAL v7 — Assets financial action sizing.
    Match both financial buttons to the actual height of the dashboard cards
    above, including responsive text wrapping. */
 (function(){
-  function syncHomeFinancialActionHeight(){
-    if(!document.querySelector(".home-financial-actions")) return;
+  function syncAssetsFinancialActionHeight(){
+    if(!document.querySelector(".assets-financial-actions")) return;
     const cards=[...document.querySelectorAll(".grid > .card")];
     if(!cards.length) return;
     const height=Math.max(...cards.map(card=>card.getBoundingClientRect().height));
-    if(height>0) document.documentElement.style.setProperty("--home-financial-card-height",height+"px");
+    if(height>0) document.documentElement.style.setProperty("--assets-financial-card-height",height+"px");
   }
-  function bindHomeFinancialSizing(){
-    syncHomeFinancialActionHeight();
+  function bindAssetsFinancialSizing(){
+    syncAssetsFinancialActionHeight();
     if(!window.ResizeObserver) return;
     const grid=document.querySelector(".grid");
-    if(!grid || grid.dataset.homeFinancialResizeBound==="1") return;
-    grid.dataset.homeFinancialResizeBound="1";
-    const observer=new ResizeObserver(syncHomeFinancialActionHeight);
+    if(!grid || grid.dataset.assetsFinancialResizeBound==="1") return;
+    grid.dataset.assetsFinancialResizeBound="1";
+    const observer=new ResizeObserver(syncAssetsFinancialActionHeight);
     observer.observe(grid);
   }
-  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",bindHomeFinancialSizing);
-  else bindHomeFinancialSizing();
-  window.addEventListener("resize",syncHomeFinancialActionHeight,{passive:true});
+  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",bindAssetsFinancialSizing);
+  else bindAssetsFinancialSizing();
+  window.addEventListener("resize",syncAssetsFinancialActionHeight,{passive:true});
 })();
 
 /* Capital shared button click/tap animation: press + contextual ripple. */
@@ -308,4 +308,13 @@ document.addEventListener("DOMContentLoaded",init);
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',bind);
   else bind();
   new MutationObserver(bind).observe(document.documentElement,{childList:true,subtree:true});
+})();
+
+/* CAPITAL v2 — English-digit invariant across every language. */
+(function(){
+  const normalize=v=>String(v??'').replace(/[۰-۹]/g,d=>'0123456789'['۰۱۲۳۴۵۶۷۸۹'.indexOf(d)]).replace(/[٠-٩]/g,d=>'0123456789'['٠١٢٣٤٥٦٧٨٩'.indexOf(d)]);
+  const scan=root=>{const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT),a=[];while(w.nextNode())a.push(w.currentNode);a.forEach(n=>{if(n.parentElement&&!/^(SCRIPT|STYLE)$/i.test(n.parentElement.tagName))n.nodeValue=normalize(n.nodeValue)});document.querySelectorAll('input,textarea,option').forEach(e=>{if('value' in e)e.value=normalize(e.value);if(e.textContent)e.textContent=normalize(e.textContent)})};
+  window.addEventListener('load',()=>scan(document.body));
+  document.addEventListener('capital:language',()=>requestAnimationFrame(()=>scan(document.body)));
+  new MutationObserver(()=>scan(document.body)).observe(document.body,{subtree:true,childList:true,characterData:true});
 })();

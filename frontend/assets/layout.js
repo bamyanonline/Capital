@@ -19,20 +19,20 @@
   <div class="tools"></div>
 </header>`;
   const NAV = `<nav class="bottom" aria-label="ناوبری اصلی">
-  <a href="home.html"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3.5 10.6 12 3.5l8.5 7.1v8.1a2 2 0 0 1-2 2H5.5a2 2 0 0 1-2-2z" fill="none" stroke="currentColor" stroke-width="1.9"/><path d="M9 20.5v-6.2h6v6.2" fill="none" stroke="currentColor" stroke-width="1.9"/></svg></span><b data-t="home">خانه</b></a>
+  <a href="assets.html"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6.2 8.2h11.6a2 2 0 0 1 2 2v7.1a2 2 0 0 1-2 2H6.2a2 2 0 0 1-2-2v-7.1a2 2 0 0 1 2-2z" fill="none" stroke="currentColor" stroke-width="1.9"/><path d="M8.3 8.2V6.7a2 2 0 0 1 2-2h3.4a2 2 0 0 1 2 2v1.5M4.2 12.3h15.6M15.2 12.3v2.2h-3.4v-2.2" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></span><b data-t="assets">دارایی‌ها</b></a>
   <a href="plans.html"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="4" y="3.8" width="16" height="16.4" rx="3" fill="none" stroke="currentColor" stroke-width="1.9"/><path d="M8 8h8M8 12h8M8 16h5.2" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg></span><b data-t="plans">پلن‌ها</b></a>
   <a href="history.html"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4.3 10.5a8 8 0 1 1 1.5 6.8" fill="none" stroke="currentColor" stroke-width="1.9"/><path d="M4 5.2v5.5h5.4" fill="none" stroke="currentColor" stroke-width="1.9"/><path d="M12 7.1v5l3.1 1.8" fill="none" stroke="currentColor" stroke-width="1.9"/></svg></span><b data-t="history">تاریخچه</b></a>
   <a href="market.html"><span class="chart-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 19.5V5M4 19.5h16.5" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="m6.7 15.2 3.6-3.7 3 2.2 4.5-6" fill="none" stroke="currentColor" stroke-width="2"/></svg></span><b data-t="market">مارکت</b></a>
   <a href="about.html"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.7" fill="none" stroke="currentColor" stroke-width="1.9"/><path d="M12 10.2v6.1" stroke="currentColor" stroke-width="1.9"/><circle cx="12" cy="7.3" r="1.05" fill="currentColor"/></svg></span><b data-t="about">درباره ما</b></a>
 </nav>`;
 
-  const NAV_PAGES = new Set(["home.html", "plans.html", "history.html", "market.html", "about.html"]);
+  const NAV_PAGES = new Set(["assets.html", "plans.html", "history.html", "market.html", "about.html"]);
 
   function normalizePagePath(pathname) {
     let path = String(pathname || "").split("?")[0].split("#")[0];
     try { path = decodeURIComponent(path); } catch (_) {}
     path = path.replace(/\/+$/, "");
-    if (!path || path === "/") return "home.html";
+    if (!path || path === "/") return "assets.html";
 
     const page = path.split("/").pop() || "";
     if (NAV_PAGES.has(page)) return page;

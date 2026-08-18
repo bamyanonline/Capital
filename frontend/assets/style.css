@@ -1717,7 +1717,7 @@ input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px soli
 .withdrawal-form .summary-card > div{margin:0!important}
 .permanent-warning p{margin:0!important}
 
-/* Home actions */
+/* Assets actions */
 .mini-actions,.quick-actions{margin:0!important}
 .mini-card{display:flex!important;align-items:center!important;justify-content:center!important;gap:var(--site-gap)!important}
 .quick-action{display:flex!important;align-items:center!important;gap:var(--site-gap)!important}
@@ -1873,19 +1873,19 @@ input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px soli
 }
 
 
-/* CAPITAL v7 — Home financial actions
+/* CAPITAL v7 — Assets financial actions
    Deposit/withdraw use the canonical .btn component so their dimensions,
    press/ripple behavior, typography and interaction remain identical to
    plan activation buttons. Only the semantic color of withdrawal differs. */
-.home-financial-actions{
+.assets-financial-actions{
   width:100%!important;
   grid-template-columns:repeat(2,minmax(0,1fr))!important;
   align-items:stretch!important;
 }
-.home-financial-btn{
+.assets-financial-btn{
   width:100%!important;
-  height:var(--home-financial-card-height,auto)!important;
-  min-height:var(--home-financial-card-height,44px)!important;
+  height:var(--assets-financial-card-height,auto)!important;
+  min-height:var(--assets-financial-card-height,44px)!important;
   margin:0!important;
   padding:0 var(--grid-3)!important;
   gap:var(--grid-2)!important;
@@ -1893,7 +1893,7 @@ input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px soli
   white-space:nowrap!important;
   text-decoration:none!important;
 }
-.home-financial-btn .financial-btn-icon{
+.assets-financial-btn .financial-btn-icon{
   width:var(--icon-box)!important;
   height:var(--icon-box)!important;
   min-width:var(--icon-box)!important;
@@ -1902,16 +1902,16 @@ input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px soli
   place-items:center!important;
   color:currentColor!important;
 }
-.home-financial-btn .financial-btn-icon svg{
+.assets-financial-btn .financial-btn-icon svg{
   width:var(--icon-size)!important;
   height:var(--icon-size)!important;
   display:block!important;
 }
-.withdraw-home-btn{
+.withdraw-assets-btn{
   background:linear-gradient(135deg,#22c55e 0%,#16a34a 52%,#15803d 100%)!important;
   box-shadow:0 7px 16px rgba(21,128,61,.20),inset 0 1px 0 rgba(255,255,255,.28)!important;
 }
-.withdraw-home-btn:hover{
+.withdraw-assets-btn:hover{
   box-shadow:0 10px 22px rgba(21,128,61,.26),inset 0 1px 0 rgba(255,255,255,.32)!important;
 }
 
