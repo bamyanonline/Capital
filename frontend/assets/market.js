@@ -12,21 +12,15 @@
     ["tron", "TRXUSDT"]
   ];
 
-  const CG = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=" +
-    COINS.map(([id]) => id).join(",") +
-    "&order=market_cap_desc&per_page=10&page=1&sparkline=false&price_change_percentage=24h";
 
-  const LOCALES = {
-    fa: "fa-IR", ar: "ar-SA", ur: "ur-PK", en: "en-US",
-    fr: "fr-FR", ru: "ru-RU", zh: "zh-CN"
-  };
+  const LOCALES = {fa:"en-US",ar:"en-US",ur:"en-US",en:"en-US",fr:"en-US",ru:"en-US",zh:"en-US",es:"en-US"};
 
   let coins = [];
   let socket = null;
   let retry = 0;
   let reconnectTimer = null;
 
-  const locale = () => LOCALES[localStorage.getItem("capitalLang") || "fa"] || "fa-IR";
+  const locale = () => "en-US";
 
   const finite = (value, fallback = 0) => {
     const n = Number(value);
@@ -156,7 +150,7 @@
 
   async function load() {
     try {
-      const response = await fetch(CG, { cache: "no-store" });
+      const response = await fetch("/api/market", { cache: "no-store", credentials: "same-origin" });
       if (!response.ok) throw new Error("MARKET_API");
 
       const fresh = await response.json();

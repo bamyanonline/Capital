@@ -3,7 +3,7 @@
 <div aria-label="CAPITAL logo" class="login-logo-wrap login-brand"><img alt="CAPITAL" class="login-logo" src="assets/logo-login-v7.webp"/></div>
 <div class="login-title">CAPITAL</div>
 <div class="login-language">
-<select aria-label="Language" class="lang" id="language" onchange="selectLang()">
+<select aria-label="Language" class="lang" id="language" data-capital-language>
 <option value="en">🇬🇧 English</option>
 <option value="fr">🇫🇷 Français</option>
 <option value="ru">🇷🇺 Русский</option>
@@ -13,10 +13,10 @@
 <option value="fa">🇮🇷 فارسی</option>
 </select>
 </div>
-<form data-action-form="login" onsubmit="login(event)">
+<form data-action-form="login">
 <label data-t="email" for="loginEmail">ایمیل</label><input autocomplete="email" id="loginEmail" name="email" required="" type="email"/>
 <label data-t="password" for="loginPassword">رمز عبور</label><input autocomplete="current-password" id="loginPassword" name="password" required="" type="password"/>
 <button class="btn" data-t="login">ورود</button>
 </form>
-<div class="links"><a data-t="register" href="register.html">ثبت نام</a><a href="reset-password.html" data-t="forgot">فراموشی رمز عبور</a><a href="assets.html?preview=1">مشاهده صفحات</a></div>
+<div class="links"><a data-t="register" href="register.html">ثبت نام</a><a href="reset-password.html" data-t="forgot">فراموشی رمز عبور</a></div>
 </section></main><script src="assets/api.js"></script><script src="assets/i18n.js"></script><script src="assets/app.js"></script></body></html>

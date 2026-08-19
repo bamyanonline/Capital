@@ -13,7 +13,7 @@ function tr(){
   });
   translateTextNodes(document.body);
   translateAttributes();
-  const sel=document.querySelector("#language"); if(sel) sel.value=key;
+  document.querySelectorAll("#language,[data-capital-language]").forEach(sel=>{sel.value=key});
   updateDocumentTitle();
 }
 function setLang(k){
@@ -31,7 +31,7 @@ function setLang(k){
   setTimeout(()=>{try{tr()}catch(_){}},0);
   setTimeout(()=>{try{tr()}catch(_){}},100);
 }
-function selectLang(){const v=document.querySelector("#language")?.value;if(v)setLang(v)}
+function selectLang(e){const v=e?.target?.value||document.querySelector("#language,[data-capital-language]")?.value;if(v)setLang(v)}
 function extraText(key){
   const map={
     en:{adminReserved:"This email is reserved.",emailExists:"This email is already registered.",minAmount:"Minimum amount is 100 USDT.",inactive:"Activate plan",pending:"Pending",verified:"Verified",rejected:"Rejected",depositType:"Deposit",withdrawType:"Withdrawal",profitType:"Daily profit",completed:"Completed",unverified:"Awaiting verification",walletSaved:"Withdrawal address saved successfully ✓",invalidWallet:"Please enter a valid TRC20 address."},
@@ -50,19 +50,8 @@ function uiError(err){
   return map[code]||runtimeText("خطایی رخ داد. دوباره تلاش کنید.");
 }
 function toast(t){const e=document.querySelector(".toast");if(!e)return;e.textContent=t;e.classList.add("show");clearTimeout(window.__capitalToast);window.__capitalToast=setTimeout(()=>e.classList.remove("show"),2200)}
-function currentEmail(){return (localStorage.getItem("capitalEmail")||"").trim().toLowerCase()}
-function findUser(email){
-  // Compatibility facade. New code uses CapitalAPI; this is kept for old integrations.
-  try{const db=JSON.parse(localStorage.getItem("capitalMockDB")||"null");return db?.users?.find(u=>String(u.email||"").toLowerCase()===String(email||"").toLowerCase())||null}catch(_){return null}
-}
-function generateReferralId(users){const alphabet="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";let id;do{id="CAP"+Array.from({length:5},()=>alphabet[Math.floor(Math.random()*alphabet.length)]).join("")}while((users||[]).some(u=>u.referralId===id));return id}
-async function login(e){
-  e.preventDefault();
-  const form=e.target, email=(form.querySelector('input[type="email"]')?.value||"").trim().toLowerCase(), password=form.querySelector('input[type="password"]')?.value||"";
-  if(!email||!password)return;
-  try{const user=await CapitalAPI.login(email,password);localStorage.setItem("capitalEmail",email);window.__capitalUser=user;location.href="assets.html"}
-  catch(err){toast(uiError(err))}
-}
+function currentEmail(){return ""}
+
 async function register(e){
   e.preventDefault();
   const a=document.querySelector("#password")?.value||"", b=document.querySelector("#confirm")?.value||"";
@@ -74,7 +63,7 @@ async function register(e){
   try{
     const referralFrom=(new URLSearchParams(location.search).get("ref")||"").trim();
     const user=await CapitalAPI.register({name,family,email,password:a,referredBy:referralFrom});
-    localStorage.setItem("capitalEmail",email);window.__capitalUser=user;location.href="assets.html";
+    window.__capitalUser=user;location.href="assets.html";
   }catch(err){toast(uiError(err))}
 }
 async function logout(){try{await CapitalAPI.logout()}finally{location.href="index.html"}}
@@ -90,7 +79,7 @@ async function refreshUserUI(){
   window.__capitalUser=user;window.__capitalDashboard=dash;
   renderVip(user,dash);renderDashboard(dash,user);renderProfile(user,dash);renderProfileReferral(user);await renderTeamStats();await refreshNotificationBadge();return {user,dash};
 }
-function localeForLanguage(){return ({fa:"fa-IR",ar:"ar-SA",ur:"ur-PK",en:"en-US",fr:"fr-FR",ru:"ru-RU",zh:"zh-CN"}[langCode()]||"en-US")}
+function localeForLanguage(){return "en-US"}
 function money(v){return Number(v||0).toFixed(2)+" USDT"}
 function renderDashboard(d){if(!d)return;const map={invested:d.investedCapital,daily:d.dailyProfit,team:d.teamProfit,total:d.totalProfit,available:d.available,withdrawals:d.totalWithdrawals,referralReward:d.referralReward??d.referralIncome??0,otherRewards:d.otherRewards??0};Object.entries(map).forEach(([k,v])=>document.querySelectorAll(`[data-dashboard="${k}"]`).forEach(e=>e.textContent=money(v)))}
 function renderVip(user,dash){
@@ -112,14 +101,15 @@ function renderProfile(user,dash){
 }
 async function renderTeamStats(){const box=document.querySelector("[data-profile-direct-members]");if(!box)return;try{const x=await CapitalAPI.teamStats();document.querySelectorAll("[data-profile-direct-members]").forEach(e=>e.textContent=Number(x?.directMembers||0));document.querySelectorAll("[data-profile-team-members]").forEach(e=>e.textContent=Number(x?.teamMembers||0));}catch(_){}}
 async function refreshNotificationBadge(){const badge=document.querySelector("#notificationBadge");if(!badge)return;try{const rows=await CapitalAPI.listNotifications();const n=rows.filter(x=>!x.read).length;badge.textContent=n>99?"99+":String(n);badge.hidden=n===0;}catch(_){badge.hidden=true}}
-async function renderNotifications(){const box=document.querySelector("#notificationsList");if(!box)return;const t=notificationTranslations[langCode()]||notificationTranslations.fa;let rows=[];let source="backend";try{rows=await CapitalAPI.listNotifications()}catch(err){source="fallback";try{const raw=JSON.parse(localStorage.getItem("capitalMockDB")||"null");const email=String(localStorage.getItem("capitalEmail")||"").toLowerCase();const user=raw?.users?.find(u=>String(u.email||"").toLowerCase()===email);if(user){const read=new Set(user.notificationReadIds||[]);const withdrawals=(raw.withdrawals||[]).filter(w=>w.userId===user.id&&["completed","approved","success","rejected"].includes(String(w.status||"").toLowerCase())).map(w=>{const st=String(w.status||"").toLowerCase(),id="withdrawal:"+w.id+":"+st;return{id,kind:"withdrawal",status:st==="rejected"?"rejected":"success",title:st==="rejected"?t.withdrawRejected:t.withdrawSuccess,body:st==="rejected"?(w.rejectReason||"درخواست برداشت شما توسط مدیریت رد شده است."):"برداشت "+Number(w.amount||0).toFixed(2)+" USDT با موفقیت پردازش شد.",createdAt:w.processedAt||w.createdAt,read:read.has(id)}});const announcements=(raw.adminAnnouncements||[]).filter(x=>!x.userId||x.userId===user.id).map(x=>{const id="announcement:"+x.id;return{id,kind:"admin",status:"info",title:x.title||t.adminNotice,body:x.body||"",createdAt:x.createdAt||new Date().toISOString(),read:read.has(id)}});rows=[...withdrawals,...announcements].sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));}}catch(_){rows=[]}if(!rows.length){box.innerHTML=`<div class="empty-state">${source==="fallback"?runtimeText("اتصال اعلان‌ها به سرور برقرار نشد. در نسخه محلی، ابتدا سرور را اجرا کنید."):t.noNotifications}</div>`;return;}box.innerHTML=rows.map(x=>{const title=x.kind==='admin'?(x.title||t.adminNotice):(x.status==='rejected'?t.withdrawRejected:t.withdrawSuccess);return `<article class="notification-item ${x.read?'read':'unread'}"><div class="notification-icon ${x.status==='rejected'?'rejected':''}" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 4a7 7 0 0 0-7 7v3.2L3.5 17h17L19 14.2V11a7 7 0 0 0-7-7Z" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M9.5 20h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></div><div class="notification-body"><div class="notification-head"><strong>${escapeHtml(title)}</strong>${x.read?'':'<span class="notification-dot"></span>'}</div><p>${escapeHtml(x.body||'')}</p><small>${new Date(x.createdAt).toLocaleString(localeForLanguage())}</small>${x.read?'':`<button type="button" class="notification-read" onclick="markNotificationRead('${String(x.id).replace(/'/g,"\'")}')">${t.markRead}</button>`}</div></article>`}).join('')}
-}
+async function renderNotifications(){const box=document.querySelector("#notificationsList");if(!box)return;const t=notificationTranslations[langCode()]||notificationTranslations.fa;let rows=[];try{rows=await CapitalAPI.listNotifications()}catch(_){rows=[]}if(!rows.length){box.innerHTML=`<div class="empty-state">${t.noNotifications}</div>`;return;}box.innerHTML=rows.map(x=>{const title=x.kind==='admin'?(x.title||t.adminNotice):(x.status==='rejected'?t.withdrawRejected:t.withdrawSuccess);return `<article class="notification-item ${x.read?'read':'unread'}"><div class="notification-icon ${x.status==='rejected'?'rejected':''}" aria-hidden="true"></div><div class="notification-body"><div class="notification-head"><strong>${escapeHtml(title)}</strong></div><p>${escapeHtml(x.body||'')}</p><small>${new Date(x.createdAt).toLocaleString(localeForLanguage())}</small>${x.read?'':`<button type="button" class="notification-read" data-notification-read="${escapeHtml(String(x.id))}">${t.markRead}</button>`}</div></article>`}).join('')}
 async function markNotificationRead(id){try{await CapitalAPI.markNotificationRead(id);await renderNotifications();await refreshNotificationBadge();}catch(err){toast(uiError(err))}}
 function currentReferralId(user){return user?.referralId||"—"}
 function renderProfileReferral(user){document.querySelectorAll("[data-user-referral]").forEach(e=>e.textContent=currentReferralId(user||window.__capitalUser))}
 function invitationUrl(){const id=currentReferralId(window.__capitalUser);if(!id||id==="—")return"";const u=new URL("register.html",location.href);u.searchParams.set("ref",id);return u.href}
 async function copyInviteLink(){const url=invitationUrl();if(!url)return;try{if(navigator.clipboard&&window.isSecureContext)await navigator.clipboard.writeText(url);else{const ta=document.createElement("textarea");ta.value=url;ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.select();document.execCommand("copy");ta.remove()}toast((profileTranslations[langCode()]||profileTranslations.fa).copied+" ✓")}catch(_){toast(url)}}
 function walletStorageKey(){return "capitalWithdrawalAddress_"+(currentEmail()||"default")}
+async function loadKyc(){const card=document.querySelector('[data-kyc-card]');if(!card)return;try{const k=await CapitalAPI.request('/api/kyc');const status=String(k.status||'not_verified');card.dataset.kycStatus=status;const badge=document.querySelector('[data-kyc-badge]'),text=document.querySelector('[data-kyc-status-text]'),submit=document.querySelector('#submitKyc');const labels={not_verified:'Not Verified',pending:'Pending',approved:'Approved',rejected:'Rejected'};if(badge)badge.textContent=labels[status]||status;if(text)text.textContent=labels[status]||status;if(submit)submit.disabled=status==='pending'||status==='approved';if(k.full_name){const f=document.querySelector('#kycFullName');if(f)f.value=k.full_name}if(k.nationality){const f=document.querySelector('#kycNationality');if(f)f.value=k.nationality}if(k.document_type){const f=document.querySelector('#kycDocumentType');if(f)f.value=k.document_type}if(status==='rejected'){const note=document.querySelector('[data-kyc-status-note]');if(note)note.textContent=k.rejection_reason||'Your verification was rejected. Please submit corrected information.'}}catch(_){} }
+async function submitKyc(){const fullName=document.querySelector('#kycFullName')?.value.trim(),nationality=document.querySelector('#kycNationality')?.value.trim(),documentType=document.querySelector('#kycDocumentType')?.value,documentNumber=document.querySelector('#kycDocumentNumber')?.value.trim(),front=document.querySelector('#kycDocumentFront')?.files?.[0],back=document.querySelector('#kycDocumentBack')?.files?.[0],selfie=document.querySelector('#kycSelfie')?.files?.[0];if(!fullName||!nationality||!documentType||!documentNumber||!front||!selfie)return toast('Please complete all KYC fields and upload the document front and selfie.');const upload=async(type,file)=>{const f=new FormData();f.append('type',type);f.append('file',file);return (await CapitalAPI.request('/api/kyc/documents',{method:'POST',body:f})).key};try{const documentPhotoKey=await upload('document',front);const documentBackKey=back?await upload('document-back',back):null;const selfieKey=await upload('selfie',selfie);await CapitalAPI.request('/api/kyc',{method:'POST',body:JSON.stringify({fullName,nationality,documentType,documentNumber,documentPhotoKey,documentBackKey,selfieKey})});toast('Verification submitted ✓');await loadKyc()}catch(e){toast(uiError(e))}}
 async function loadProfileWallet(){const input=document.querySelector("#profileWalletAddress"),btn=document.querySelector("#saveProfileWallet"),status=document.querySelector("#profileWalletStatus");if(!input)return;try{const saved=await CapitalAPI.wallet();if(saved){input.value=saved;input.readOnly=true;input.classList.add("locked-address");if(btn){btn.disabled=true;btn.textContent=lang().addressSaved||runtimeText("آدرس ثبت شده است")}if(status)status.textContent=lang().permanentVerified||runtimeText("دائمی / تأییدشده")}}catch(_){} }
 async function saveProfileWallet(){const input=document.querySelector("#profileWalletAddress");if(!input)return;try{const current=await CapitalAPI.wallet();if(current){await loadProfileWallet();return}const a=input.value.trim();if(!a)return toast(runtimeText("لطفاً آدرس کیف پول TRC20 را وارد کنید."));if(!/^T[1-9A-HJ-NP-Za-km-z]{33}$/.test(a))return toast(extraText("invalidWallet"));if(!confirm(dynamicText("walletConfirm")))return;await CapitalAPI.saveWallet(a);await loadProfileWallet();toast(extraText("walletSaved"))}catch(err){toast(uiError(err))}}
 async function changeProfilePassword(){const c=document.querySelector("#currentPassword")?.value||"",n=document.querySelector("#newPassword")?.value||"",r=document.querySelector("#confirmNewPassword")?.value||"";if(n.length<8)return toast(dynamicText("newPasswordMin"));if(n!==r)return toast(dynamicText("passwordMismatch"));try{await CapitalAPI.changePassword(c,n);["#currentPassword","#newPassword","#confirmNewPassword"].forEach(x=>{const e=document.querySelector(x);if(e)e.value=""});toast(runtimeText("رمز عبور با موفقیت تغییر کرد ✓"))}catch(err){toast(uiError(err))}}
@@ -133,7 +123,9 @@ function setupRegisterSecurity(){
   q.addEventListener("click",showAnswer);
   a.addEventListener("blur",()=>{if(!a.value.trim())card.classList.remove("is-answering")});
 }
-function forgotPassword(e){e.preventDefault();toast(runtimeText("بازیابی رمز عبور پس از اتصال Backend فعال می‌شود."));newSecurity()}
+function forgotPassword(e){e.preventDefault();toast(runtimeText("برای بازیابی رمز عبور، ایمیل خود را وارد کنید."));newSecurity()}
+async function syncServerConfig(){try{const c=await CapitalAPI.config();CAPITAL_CONFIG.deposit={...(CAPITAL_CONFIG.deposit||{}),...(c.deposit||{})};CAPITAL_CONFIG.withdrawal={...(CAPITAL_CONFIG.withdrawal||{}),...(c.withdrawal||{})};CAPITAL_CONFIG.plans=c.plans||CAPITAL_CONFIG.plans}catch(_){}}
+
 function startSession(){let timer;const reset=()=>{clearTimeout(timer);timer=setTimeout(async()=>{if(await CapitalAPI.isAuthenticated()){await CapitalAPI.logout();if(!location.pathname.endsWith("index.html")&&location.pathname!=="/")location.href="index.html"}},CAPITAL_CONFIG.sessionMinutes*60*1000)};["click","touchstart","mousemove","keydown","scroll"].forEach(x=>addEventListener(x,reset,{passive:true}));reset()}
 async function submitDeposit(){
   const amount=Number(document.querySelector("#depositAmount")?.value||0), txid=(document.querySelector("#depositTxid")?.value||"").trim();
@@ -161,14 +153,9 @@ async function submitWithdrawal(){
   if(!wallet)return toast(runtimeText("لطفاً ابتدا آدرس کیف پول برداشت را در Profile ثبت کنید."));
   try{await CapitalAPI.createWithdrawal({amount,address:wallet,network:CapitalAPI.config.withdrawal.network,currency:CapitalAPI.config.withdrawal.currency});toast(runtimeText("درخواست برداشت ثبت شد و تا تأیید مدیر از موجودی کسر نمی‌شود ✓"));document.querySelector("#withdrawAmount").value="";await refreshWithdrawUI();await refreshUserUI();await renderHistory()}catch(err){toast(uiError(err))}
 }
-const DEPOSIT_SETTINGS_KEY="capitalDepositSettings";
-function getFrontendDepositSettings(){
-  const fallback={network:CapitalAPI.config?.deposit?.network||"TRC20",address:CapitalAPI.config?.deposit?.address||"",qrData:""};
-  try{return {...fallback,...JSON.parse(localStorage.getItem(DEPOSIT_SETTINGS_KEY)||"{}")}}catch(_){return fallback}
-}
 function setupDeposit(){
   const a=document.querySelector("#depositAddress"); if(!a)return;
-  const settings=getFrontendDepositSettings();
+  const settings=CAPITAL_CONFIG.deposit||{};
   const n=document.querySelector("#depositNetwork");
   const network=settings.network||"TRC20";
   if(n){
@@ -189,6 +176,7 @@ function setupDeposit(){
 }
 window.addEventListener("storage",e=>{if(e.key===DEPOSIT_SETTINGS_KEY)setupDeposit()});
 function setupWithdraw(){const amount=document.querySelector("#withdrawAmount");if(!amount)return;amount.addEventListener("input",updateWithdrawSummary);refreshWithdrawUI()}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-notification-read]');if(!b)return;markNotificationRead(b.dataset.notificationRead).catch(err=>toast(uiError(err)));});
 async function renderHistory(){const list=document.querySelector(".history-list");if(!list)return;const items=await CapitalAPI.listHistory();if(!items.length){list.innerHTML='<div class="history-empty" data-t="historyEmpty">'+(lang().historyEmpty||"No transactions yet")+"</div>";return}const icon={deposit:'<path d="M12 4v11M7.5 10.5 12 15l4.5-4.5M5 19h14"',withdraw:'<path d="M12 20V9M7.5 13.5 12 9l4.5 4.5M5 5h14"',profit:'<path d="M5 16l4-4 3 3 7-8M15 7h4v4"'};list.innerHTML=items.map(i=>{const type=i.type==='deposit'?'deposit':i.type==='withdraw'?'withdraw':'profit',positive=i.amount>=0,status=i.status==='pending'?extraText('pending'):i.status==='verified'||i.status==='completed'?extraText('verified'):i.status==='rejected'?extraText('rejected'):i.status;return `<article class="history-item" data-type="${type}"><div class="history-icon ${type}-icon" aria-hidden="true"><svg viewBox="0 0 24 24">${icon[type]}</svg></div><div class="history-info"><b>${type==='deposit'?extraText('depositType'):type==='withdraw'?extraText('withdrawType'):extraText('profitType')}</b><small>${i.network||''} · ${new Date(i.createdAt).toLocaleDateString(localeForLanguage())} · ${status}</small></div><strong class="history-amount ${positive?'pos':'neg'}">${positive?'+':''}${Math.abs(Number(i.amount||0)).toFixed(2)} USDT</strong></article>`}).join("")}
 function bindHistoryFilters(){document.querySelectorAll('.history-filter-btn').forEach(btn=>btn.addEventListener('click',function(){document.querySelectorAll('.history-filter-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active');const type=this.dataset.filter;document.querySelectorAll('.history-item').forEach(item=>item.classList.toggle('is-hidden',type!=='all'&&item.dataset.type!==type))}))}
 document.addEventListener("capital:language",()=>{
@@ -204,20 +192,23 @@ document.addEventListener("capital:language",()=>{
 if(!localStorage.getItem("capitalLang")) localStorage.setItem("capitalLang","en");
 
 async function init(){
+  document.querySelectorAll('#language,[data-capital-language]').forEach(el=>el.addEventListener('change',selectLang));
+  document.querySelector('form[data-action-form="login"]')?.addEventListener('submit',login);
+  document.querySelector('form[data-action-form="register"]')?.addEventListener('submit',register);
+  document.querySelector('form.profile-section')?.addEventListener('submit',e=>{if(document.querySelector('#currentPassword')){e.preventDefault();changeProfilePassword()}});
   const p=location.pathname.split("/").pop()||"assets.html";
   const publicPages=["index.html","register.html",""];
-  const params=new URLSearchParams(location.search);
-  const previewRequested=params.get("preview")==="1";
-  if(previewRequested) sessionStorage.setItem("capitalPreviewMode","1");
-  const previewMode=sessionStorage.getItem("capitalPreviewMode")==="1";
-  if(!publicPages.includes(p)&&!previewMode&&!(await CapitalAPI.isAuthenticated())){location.replace("index.html");return}
+  if(!publicPages.includes(p)&&!(await CapitalAPI.isAuthenticated())){location.replace("index.html");return}
   tr();newSecurity();newRegisterSecurity();setupRegisterSecurity();
-  if(!previewMode) startSession();
+  startSession();
+  normalizeDisplayedDigits();
+  installLanguageObservers();
   // Navigation active-state is owned by the shared layout shell.
   // Keep this defensive call for pages that are initialized asynchronously.
   window.CapitalLayout?.setActiveNav?.();
   if(await CapitalAPI.isAuthenticated()) await refreshUserUI();
   await loadProfileWallet();
+  await loadKyc();
   setupDeposit();
   setupWithdraw();
   await renderHistory();
@@ -225,9 +216,6 @@ async function init(){
   await refreshNotificationBadge();
   bindHistoryFilters();
 }
-window.getCapitalUsers=()=>[];
-window.syncCurrentUserToRecord=()=>Promise.resolve();
-window.syncCurrentUserFromRecord=()=>Promise.resolve();
 document.addEventListener("click",function(e){
   const el=e.target.closest("[data-action]");
   if(!el) return;
@@ -239,6 +227,19 @@ document.addEventListener("click",function(e){
   const args=raw?raw.split(",").map(v=>{const t=v.trim(); if(/^[-+]?\d+(?:\.\d+)?$/.test(t)) return Number(t); return t.replace(/^(["\'])(.*)\1$/,"$2");}):[];
   try{ const result=fn.apply(el,args); if(result&&typeof result.catch==="function") result.catch(err=>{ if(typeof toast==="function") toast(uiError(err)); }); }catch(err){ if(typeof toast==="function") toast(uiError(err)); }
 },{passive:false});
+
+
+function normalizeEnglishDigits(value){return String(value??"").replace(/[۰-۹]/g,c=>String(c.charCodeAt(0)-1776)).replace(/[٠-٩]/g,c=>String(c.charCodeAt(0)-1632));}
+function normalizeDisplayedDigits(root=document){
+  const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT); const nodes=[]; let n;
+  while((n=walker.nextNode())){const p=n.parentElement;if(p&&!/^(SCRIPT|STYLE|NOSCRIPT|INPUT|TEXTAREA|OPTION)$/.test(p.tagName))nodes.push(n)}
+  nodes.forEach(n=>{const v=normalizeEnglishDigits(n.nodeValue);if(v!==n.nodeValue)n.nodeValue=v;});
+}
+function installLanguageObservers(){
+  const observer=new MutationObserver(()=>{clearTimeout(window.__capitalLangTimer);window.__capitalLangTimer=setTimeout(()=>{try{tr();normalizeDisplayedDigits()}catch(_){ }},0)});
+  observer.observe(document.body,{childList:true,subtree:true});
+  window.__capitalLanguageObserver=observer;
+}
 
 document.addEventListener("DOMContentLoaded",init);
 

@@ -1,6 +1,6 @@
 {
   "name": "capital-cloudflare-worker",
-  "version": "24.0.0",
+  "version": "2.0.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -8,7 +8,8 @@
     "check": "node --check worker.js",
     "deploy": "wrangler deploy",
     "migrate:local": "wrangler d1 migrations apply capital-prod-db --local",
-    "migrate:remote": "wrangler d1 migrations apply capital-prod-db --remote"
+    "migrate:remote": "wrangler d1 migrations apply capital-prod-db --remote",
+    "verify": "npm test && npm run check"
   },
   "devDependencies": {
     "wrangler": "^4.30.0"

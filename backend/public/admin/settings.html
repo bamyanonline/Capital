@@ -5,8 +5,8 @@
 <section class="page"><div class="page-title"><div class="title"><h1>Settings</h1><p>Admin workspace preferences</p></div></div><div class="card card-stack"><div class="section-head"><div><h2>Language</h2><p>Admin language changes instantly across all Admin pages.</p></div></div><div class="field"><label>Language</label><select aria-label="Language" class="input" data-admin-language=""><option value="en">English</option><option value="fa">Persian</option></select></div></div>
 <div class="card card-stack">
 <div class="form-grid">
-<div class="field"><label>Admin name</label><input class="input" value="Administrator"/></div>
-<div class="field"><label>Timezone</label><select class="input"><option>Asia/Kabul</option><option>UTC</option></select></div>
+<div class="field"><label>Admin name</label><input class="input" value="" placeholder="Current administrator"/></div>
+<div class="field"><label>Timezone</label><input class="input" value="Asia/Kabul" readonly/></div>
 </div>
 <hr class="section-divider"/>
 <div class="section-heading"><h2>Frontend Deposit Settings</h2><p>These values are used on the Frontend Deposit page.</p></div>
@@ -19,13 +19,9 @@
 <option value="POLYGON">Polygon — USDT</option>
 <option value="SOLANA">Solana — USDT</option>
 </select></div>
-<div class="field"><label for="depositAddressSetting">Deposit address</label><input autocomplete="off" class="input" id="depositAddressSetting" placeholder="Enter deposit address" type="text"/></div>
+<div class="field"><label for="depositAddressSetting">Deposit address</label><input autocomplete="off" class="input" id="depositAddressSetting" placeholder="Configured securely in Worker secret" type="text" readonly/></div>
 </div>
-<div class="field"><label for="depositQrSetting">Deposit QR image</label>
-<input accept="image/png,image/jpeg,image/webp" class="input" id="depositQrSetting" type="file"/>
-<div class="setting-preview"><img alt="Deposit QR preview" hidden="" id="depositQrPreview"/><span id="depositQrEmpty">No custom QR uploaded. Current Frontend QR will be used.</span></div>
-<button class="btn secondary" id="removeDepositQr" type="button">Use default QR</button>
-</div>
+<div class="form-grid"><div class="field"><label for="withdrawalFeeSetting">Withdrawal fee</label><input class="input" id="withdrawalFeeSetting" type="number" step="0.01" min="0" value="0.10"/></div><div class="field"><label for="withdrawalStartSetting">Withdrawal start (local minutes)</label><input class="input" id="withdrawalStartSetting" type="number" min="0" max="1439" value="480"/></div><div class="field"><label for="withdrawalEndSetting">Withdrawal end (local minutes)</label><input class="input" id="withdrawalEndSetting" type="number" min="0" max="1439" value="960"/></div><div class="field"><label for="withdrawalMinimumSetting">Minimum remaining balance</label><input class="input" id="withdrawalMinimumSetting" type="number" step="0.01" min="0" value="20"/></div></div>
 <div class="actions"><button class="btn" id="saveDepositSettings" type="button">Save Deposit Settings</button><button class="btn secondary logout" type="button">Sign out</button></div>
 <div aria-live="polite" class="settings-status" id="depositSettingsStatus" role="status"></div>
 </div>
@@ -34,8 +30,8 @@
 <div class="admin-manager-list" id="adminManagerList"></div>
 <div class="manager-form">
 <div class="form-grid">
-<div class="field"><label for="managerName">Full name</label><input class="input" id="managerName" placeholder="e.g. Ahmad Rahimi" type="text"/></div>
-<div class="field"><label for="managerEmail">Email</label><input class="input" id="managerEmail" placeholder="manager@example.com" type="email"/></div>
+<div class="field"><label for="managerName">Full name</label><input class="input" id="managerName" placeholder="Manager name" type="text"/></div>
+<div class="field"><label for="managerEmail">Email</label><input class="input" id="managerEmail" placeholder="manager@domain.com" type="email"/></div><div class="field"><label for="managerPassword">Temporary password</label><input class="input" id="managerPassword" autocomplete="new-password" type="password"/></div>
 </div>
 <div class="field">
 <label>Permissions</label>

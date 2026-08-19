@@ -1,45 +1,20 @@
-# CAPITAL Cloudflare Backend
+# CAPITAL Backend
 
-This backend is a Cloudflare Worker with Cloudflare D1. The project root is `capital/`.
+The backend is a Cloudflare Worker API backed by D1 and private R2 storage.
 
-## Local validation
+- `worker.js`: API and business logic
+- `migrations/`: immutable D1 migration history
+- `tests/`: automated backend/release tests
+- `public/`: synchronized deployment assets generated from the repository root sources
+- `wrangler.jsonc`: Cloudflare Worker/D1/R2 configuration
 
-```bash
-npm install
-npm run check
-npm test
-```
-
-## D1
-
-1. Create a D1 database in Cloudflare named `capital-prod-db`.
-2. Copy its database ID into `wrangler.jsonc`.
-3. Apply migrations:
+From the repository root:
 
 ```bash
+npm --prefix backend install
+npm run verify
 npm run migrate:remote
+npm run deploy
 ```
 
-## Secrets / variables
-
-Set these as Worker variables/secrets, not in Git:
-
-- `ADMIN_EMAIL`
-- `ADMIN_PASSWORD`
-- `PUBLIC_BASE_URL`
-- `ALLOWED_ORIGIN`
-- `RESEND_API_KEY` (secret, optional but recommended for password reset email)
-- `RESEND_FROM`
-
-`DB` is a D1 binding and is configured in `wrangler.jsonc`.
-
-## Deployment
-
-```bash
-npm install
-npm test
-npm run check
-npx wrangler deploy
-```
-
-The scheduled job is `30 19 * * *` UTC, which is 00:00 Afghanistan time (Asia/Kabul). It expires old pending withdrawals and runs the daily profit/team-profit engine exactly once per Afghanistan financial date.
+See `../docs/DEPLOYMENT.md` and `../docs/ARCHITECTURE.md`.

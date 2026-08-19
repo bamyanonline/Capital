@@ -1,15 +1,50 @@
 # CAPITAL
 
-Cloudflare-ready project structure.
+CAPITAL is a Cloudflare Worker + D1 + R2 web application with a multilingual customer frontend and a bilingual English/Persian administration panel.
 
-- `frontend/` — static user interface source
-- `admin/` — static administrator interface source
-- `backend/` — Cloudflare Worker + D1 migrations
-- `FINANCIAL_RULES.md` — final business/financial specification
-- `SECURITY.md` — security notes
+## Repository layout
 
-## Cloudflare architecture
+```text
+frontend/                 # canonical customer frontend
+admin/                    # canonical admin frontend (English/Persian)
+backend/
+  worker.js               # Cloudflare Worker/API
+  migrations/             # D1 migrations; never delete/reorder applied migrations
+  public/                  # deployable copy generated from frontend/ and admin/
+  tests/                   # backend and release tests
+  wrangler.jsonc           # Cloudflare bindings/configuration
+scripts/sync-public.mjs   # synchronizes canonical UI sources into backend/public
+.github/workflows/        # CI
+```
 
-GitHub is the source of truth. Cloudflare Worker serves the API and the copied static assets in `backend/public/`. Cloudflare D1 stores normalized application data.
+## Local verification
 
-The `backend/public/frontend` and `backend/public/admin` directories are deployment copies of the corresponding source directories. Keep the source copies in sync when changing static files.
+```bash
+npm --prefix backend install
+npm run verify
+```
+
+## Deploy
+
+1. Create a Cloudflare D1 database and put its real `database_id` in `backend/wrangler.jsonc`.
+2. Create the private R2 bucket used for KYC.
+3. Configure production secrets in Cloudflare.
+4. Apply migrations with `npm run migrate:remote`.
+5. Run `npm run verify`.
+6. Run `npm run deploy`.
+
+See [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md).
+
+## Important
+
+Do not edit `backend/public` directly. It is a deployable synchronized copy. The canonical UI source is `frontend/` and `admin/`.
+
+## Documentation
+
+- `docs/ARCHITECTURE.md`
+- `docs/DEPLOYMENT.md`
+- `docs/SECURITY.md`
+- `docs/KYC.md`
+- `docs/FINANCIAL_RULES.md`
+- `docs/BACKEND_HARDENING.md`
+- `docs/releases/V1.md`

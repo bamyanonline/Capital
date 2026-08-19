@@ -16,7 +16,7 @@
       <b class="notification-badge" id="notificationBadge" hidden>0</b>
     </a>
   </div>
-  <div class="tools"></div>
+  <div class="tools"><select class="capital-language-switch" data-capital-language aria-label="Language"><option value="en">🇬🇧 English</option><option value="fr">🇫🇷 Français</option><option value="ru">🇷🇺 Русский</option><option value="zh">🇨🇳 中文</option><option value="es">🇪🇸 Español</option><option value="ar">🇸🇦 العربية</option><option value="ur">🇵🇰 اردو</option><option value="fa">🇮🇷 فارسی</option></select></div>
 </header>`;
   const NAV = `<nav class="bottom" aria-label="ناوبری اصلی">
   <a href="assets.html"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6.2 8.2h11.6a2 2 0 0 1 2 2v7.1a2 2 0 0 1-2 2H6.2a2 2 0 0 1-2-2v-7.1a2 2 0 0 1 2-2z" fill="none" stroke="currentColor" stroke-width="1.9"/><path d="M8.3 8.2V6.7a2 2 0 0 1 2-2h3.4a2 2 0 0 1 2 2v1.5M4.2 12.3h15.6M15.2 12.3v2.2h-3.4v-2.2" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></span><b data-t="assets">دارایی‌ها</b></a>

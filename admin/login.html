@@ -13,15 +13,15 @@
 <div aria-label="CAPITAL logo" class="login-logo-wrap login-brand">
 <img alt="CAPITAL" class="login-logo" src="./assets/logo-login-gray-v11.webp"/>
 </div>
-<div class="login-brand-title">CAPITAL Admin</div>
+<div class="login-brand-title">CAPITAL Admin</div><div class="admin-login-language"><label>Language</label><select class="input" data-admin-language><option value="en">English</option><option value="fa">فارسی</option></select></div>
 <form id="loginForm">
 <div class="field"><label>Email</label><input autocomplete="username" class="input" placeholder="Administrator email" required="" type="email"/></div>
 <div class="field"><label>Password</label><input autocomplete="current-password" class="input" placeholder="Administrator password" required="" type="password"/></div>
 <button class="btn" type="submit">Sign in</button>
-<p class="hint">Secure administrator login. Configure ADMIN_EMAIL and ADMIN_PASSWORD before production.</p>
+<p class="hint" data-admin-hint>Secure administrator login.</p>
 </form>
 </section>
-<a class="admin-preview-link" href="./index.html">View Pages</a>
+
 </main>
 <script src="./assets/admin.js?v=12"></script>
 </body>

@@ -1,6 +1,10 @@
+# Local development placeholders only. Never commit real values.
 ADMIN_EMAIL=admin@example.com
-ADMIN_PASSWORD=CHANGE_THIS_STRONG_PASSWORD
-PUBLIC_BASE_URL=https://capital.example.com
+ADMIN_PASSWORD_HASH=
+# Legacy fallback only (do not use in production): ADMIN_PASSWORD=
+DEPOSIT_ADDRESS=
+ALLOWED_ORIGIN=http://localhost:8787
+PUBLIC_BASE_URL=http://localhost:8787
 RESEND_API_KEY=
-RESEND_FROM=CAPITAL <onboarding@example.com>
-ALLOWED_ORIGIN=https://capital.example.com
+RESEND_FROM=CAPITAL <no-reply@example.com>
+BLOCKCHAIN_PROVIDER_SECRET=

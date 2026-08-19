@@ -194,8 +194,8 @@ textarea.input{resize:vertical;min-height:130px}
 .plan-members strong{font-size:16px;color:var(--admin-primary)}
 
 /* ---------- Settings / managers ---------- */
-.setting-preview{margin-top:var(--admin-space-2);min-height:120px;border:1px dashed var(--admin-border-strong);border-radius:var(--admin-radius-small);background:var(--admin-surface-muted);display:flex;align-items:center;justify-content:center;padding:8px;text-align:center;color:var(--admin-muted);font-size:11px}
-.setting-preview img{max-width:180px;max-height:180px;object-fit:contain;border-radius:7px;background:var(--admin-surface)}
+ .setting-preview{margin-top:var(--admin-space-2);min-height:120px;border:1px dashed var(--admin-border-strong);border-radius:var(--admin-radius-small);background:var(--admin-surface-muted);display:flex;align-items:center;justify-content:center;padding:8px;text-align:center;color:var(--admin-muted);font-size:11px}
+ .setting-preview img{max-width:180px;max-height:180px;object-fit:contain;border-radius:7px;background:var(--admin-surface)}
 .settings-status{min-height:18px;margin-top:var(--admin-space-2);color:var(--admin-primary-hover);font-size:11px;font-weight:700;line-height:1.5}
 .admin-manager-list{display:flex;flex-direction:column;margin-top:0}
 .admin-manager{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:var(--admin-space-5);align-items:center;padding:14px 0;border:0;background:transparent}
@@ -218,7 +218,6 @@ textarea.input{resize:vertical;min-height:130px}
 .login-brand{justify-content:center;margin-bottom:var(--admin-space-4)}
 .login-card form{display:grid;gap:var(--admin-space-4)}
 .hint{font-size:11px;color:var(--admin-muted);line-height:1.6}
-.admin-preview-link{display:inline-flex;justify-content:center;margin-top:var(--admin-space-3);color:var(--admin-primary-hover);font-size:12px;font-weight:700}
 .login-logo-wrap{position:relative;width:142px;height:142px;margin:0 auto 8px;border-radius:50%;overflow:hidden;isolation:isolate;filter:drop-shadow(0 10px 20px rgba(70,78,84,.12))}
 .login-logo-wrap::before{content:"";position:absolute;z-index:2;top:-28%;left:-62%;width:34%;height:156%;transform:rotate(22deg);background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,.08) 28%,rgba(255,255,255,.78) 50%,rgba(210,216,220,.30) 62%,transparent 100%);filter:blur(1px);opacity:0;pointer-events:none;mix-blend-mode:screen;animation:capitalLogoShine 4.8s ease-in-out infinite}
 .login-logo-wrap::after{content:"";position:absolute;inset:0;z-index:1;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(91,101,108,.10),inset 0 0 24px rgba(91,101,108,.05);pointer-events:none;animation:capitalLogoGlow 4.8s ease-in-out infinite}
@@ -336,3 +335,6 @@ html[dir="rtl"] .sidebar-footer{direction:rtl}
   .btn,.sidebar,.nav a{transition:none}
   .login-logo-wrap::before,.login-logo-wrap::after{animation:none}
 }
+
+.admin-language-switch{min-width:88px;height:36px;padding:0 8px;border:1px solid var(--admin-border,#d8dde5);border-radius:8px;background:var(--admin-surface,#fff);color:inherit;font:inherit;font-size:12px;}
+.admin-login-language{margin:12px 0}.admin-login-language label{display:block;margin-bottom:6px;font-size:12px;font-weight:700}

@@ -3,7 +3,7 @@
   "name": "capital-api",
   "main": "worker.js",
   "compatibility_date": "2026-08-18",
-  "compatibility_flags": [],
+  "compatibility_flags": ["nodejs_compat"],
   "assets": {
     "directory": "./public"
   },
@@ -15,6 +15,7 @@
       "migrations_dir": "./migrations"
     }
   ],
+  "r2_buckets": [{"binding":"KYC_BUCKET","bucket_name":"capital-kyc-private"}],
   "triggers": {
     "crons": ["30 19 * * *"]
   }

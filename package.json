@@ -1,0 +1,15 @@
+{
+  "name": "capital-project",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "sync:public": "node scripts/sync-public.mjs",
+    "test": "npm --prefix backend test",
+    "check": "npm --prefix backend run check",
+    "verify": "npm run sync:public && npm run test && npm run check",
+    "migrate:local": "npm --prefix backend run migrate:local",
+    "migrate:remote": "npm --prefix backend run migrate:remote",
+    "deploy": "npm run sync:public && npm --prefix backend run deploy"
+  }
+}

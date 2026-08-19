@@ -4,8 +4,8 @@
 <div class="profile-identity">
 <div aria-hidden="true" class="profile-avatar-icon"><svg viewbox="0 0 24 24"><circle cx="12" cy="8" fill="none" r="3.5" stroke="currentColor" stroke-width="1.8"></circle><path d="M5 20c.8-3.4 3.2-5.2 7-5.2s6.2 1.8 7 5.2" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.8"></path></svg></div>
 <div class="profile-identity-copy">
-<h1 data-profile-name="">محمد رضا</h1>
-<div class="profile-email" data-user-email="">user@example.com</div>
+<h1 data-profile-name="">—</h1>
+<div class="profile-email" data-user-email="">—</div>
 </div>
 </div>
 <div class="profile-referral-card">
@@ -75,6 +75,10 @@
     </div>
   </div>
 
+  <div class="kyc-divider"></div>
+  <div class="kyc-upload-heading">Selfie</div>
+  <div class="kyc-upload-block"><label for="kycSelfie">Selfie</label><div class="kyc-upload-box"><input id="kycSelfie" name="selfie" type="file" accept="image/jpeg,image/png,image/webp"/><div class="kyc-upload-placeholder"><strong>Upload Selfie</strong><small>JPG, PNG, WEBP — Max 5MB</small></div></div></div>
+
   <button class="btn kyc-submit" data-action="submitKyc" data-action-args="" id="submitKyc" type="button">Submit for Verification</button>
 
   <div class="kyc-status-panel kyc-status-not" data-kyc-status-panel>
@@ -86,7 +90,7 @@
 <section class="profile-settings-section"><h2 class="section-title">⚙️ <span>تنظیمات</span></h2><div class="form profile-section profile-settings-card">
 <div class="profile-settings-grid">
 <a class="btn profile-settings-password" data-t="changePassword" href="change-password.html" aria-label="تغییر رمز عبور" title="تغییر رمز عبور"><span aria-hidden="true">🔐</span><span>تغییر رمز</span></a>
-<select aria-label="Language" class="profile-settings-language" id="language" onchange="selectLang()"><option value="en">🇬🇧 English</option><option value="fr">🇫🇷 Français</option><option value="ru">🇷🇺 Русский</option><option value="zh">🇨🇳 中文</option><option value="es">🇪🇸 Español</option><option value="ar">🇸🇦 العربية</option><option value="ur">🇵🇰 اردو</option><option value="fa">🇮🇷 فارسی</option></select>
+<select aria-label="Language" class="profile-settings-language" id="language" data-capital-language><option value="en">🇬🇧 English</option><option value="fr">🇫🇷 Français</option><option value="ru">🇷🇺 Русский</option><option value="zh">🇨🇳 中文</option><option value="es">🇪🇸 Español</option><option value="ar">🇸🇦 العربية</option><option value="ur">🇵🇰 اردو</option><option value="fa">🇮🇷 فارسی</option></select>
 </div>
 </div></section>
 <section class="profile-contact-section">
@@ -240,41 +244,4 @@
   .profile-kyc-section .kyc-submit{width:calc(100% - 24px);margin-left:12px!important;margin-right:12px!important}
 }
 </style>
-<script>
-(function(){
-  const section=document.querySelector('[data-kyc-section]'); if(!section)return;
-  const statusText=section.querySelector('[data-kyc-status-text]');
-  const note=section.querySelector('[data-kyc-status-note]');
-  const badge=section.querySelector('[data-kyc-badge]');
-  const panel=section.querySelector('[data-kyc-status-panel]');
-  function setStatus(status){
-    status=String(status||'not-verified').toLowerCase().replace(/_/g,'-');
-    if(!['not-verified','pending','approved','rejected'].includes(status))status='not-verified';
-    section.setAttribute('data-kyc-status',status);
-    panel.className='kyc-status-panel kyc-status-'+(status==='not-verified'?'not':status);
-    const map={
-      'not-verified':['Not Verified','Your identity has not been verified yet.','Not Verified'],
-      pending:['Pending','Your verification request is under review.','Pending'],
-      approved:['Approved','Your identity has been successfully verified.','Approved'],
-      rejected:['Rejected','Your verification request was rejected. Please review and submit again.','Rejected']
-    };
-    const x=map[status]; statusText.textContent=x[0]; note.textContent=x[1]; badge.textContent=x[2];
-    badge.className='kyc-badge kyc-badge-'+(status==='not-verified'?'not':status);
-    if(status==='approved'){document.querySelector('#submitKyc')?.setAttribute('aria-disabled','true');document.querySelector('#submitKyc').textContent='Submitted';}
-    else if(document.querySelector('#submitKyc')){document.querySelector('#submitKyc').removeAttribute('aria-disabled');document.querySelector('#submitKyc').textContent='Submit for Verification';}
-  }
-  function preview(input,key){
-    const img=section.querySelector('[data-preview="'+key+'"]'), placeholder=section.querySelector('[data-upload-placeholder="'+key+'"]');
-    if(!img||!placeholder)return; const f=input.files&&input.files[0]; if(!f)return;
-    if(!f.type.startsWith('image/'))return;
-    const reader=new FileReader(); reader.onload=()=>{img.src=reader.result;img.hidden=false;placeholder.hidden=true}; reader.readAsDataURL(f);
-  }
-  section.querySelector('#kycDocumentFront')?.addEventListener('change',function(){preview(this,'front')});
-  section.querySelector('#kycDocumentBack')?.addEventListener('change',function(){preview(this,'back')});
-  const params=new URLSearchParams(location.search); if(params.get('kyc'))setStatus(params.get('kyc'));
-  setTimeout(()=>{const u=window.__capitalUser||{}; if(u.kycStatus)setStatus(u.kycStatus);},700);
-  window.capitalProfileKycSetStatus=setStatus;
-})();
-</script>
-
 </body></html>
