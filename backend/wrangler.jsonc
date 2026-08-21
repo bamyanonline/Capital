@@ -10,8 +10,8 @@
   "d1_databases": [
     {
       "binding": "DB",
-      "database_name": "capital-prod-db",
-      "database_id": "REPLACE_WITH_CLOUDFLARE_D1_DATABASE_ID",
+      "database_name": "capital-db",
+      "database_id": "6a8e33b0-1a29-4ca3-b8d0-bc9956148e4c",
       "migrations_dir": "./migrations"
     }
   ],

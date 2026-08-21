@@ -19,7 +19,7 @@ npx --prefix backend wrangler login
 ## 4. Create D1
 
 ```bash
-npx --prefix backend wrangler d1 create capital-prod-db
+npx --prefix backend wrangler d1 create capital-db
 ```
 
 Copy the returned `database_id` into `backend/wrangler.jsonc`. Keep the binding name `DB` unchanged.
@@ -34,7 +34,7 @@ npm run migrate:remote
 Check the migration state:
 
 ```bash
-npx --prefix backend wrangler d1 migrations list capital-prod-db --remote
+npx --prefix backend wrangler d1 migrations list capital-db --remote
 ```
 
 ## 6. Configure production secrets
