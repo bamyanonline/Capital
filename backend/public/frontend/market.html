@@ -1,0 +1,44 @@
+<!doctype html>
+<html dir="rtl" lang="fa">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<title>CAPITAL | Market</title>
+<link href="assets/style.css" rel="stylesheet"/>
+</head>
+<body>
+<div class="app">
+
+
+
+<main class="container" data-page-main="true">
+<section class="hero">
+<h1 data-t="market">مارکت</h1>
+<p class="market-live-status" id="marketLiveStatus" data-t="marketLiveStatus">وضعیت زنده بازار</p>
+</section>
+<section class="card market-card">
+<div class="market-content">
+<div class="market-meta">
+<span data-t="updated">به‌روزرسانی لحظه‌ای</span>
+<strong id="marketClock">--:--:--</strong>
+</div>
+<div class="market-scroll">
+<table class="market-table"><colgroup><col class="rank"><col class="coin"><col class="price"><col class="change"><col class="cap"></colgroup>
+<thead><tr>
+<th><span data-t="rank">رتبه</span></th>
+<th><span data-t="coin">ارز</span></th>
+<th><span data-t="price">قیمت</span></th>
+<th><span data-t="change24">تغییر ۲۴ ساعته</span></th>
+<th><span data-t="marketCap">ارزش بازار</span></th>
+</tr></thead>
+<tbody id="marketRows"></tbody>
+</table>
+</div>
+<p class="note market-note">قیمت‌ها از منابع عمومی بازار دریافت می‌شوند؛ در صورت قطع سرویس، عدد ساختگی نمایش داده نمی‌شود.</p>
+</div>
+</section>
+</main></div>
+<div class="toast"></div>
+
+<script src="assets/api.js"></script><script src="assets/i18n.js"></script><script src="assets/layout.js"></script><script src="assets/app.js"></script><script src="assets/market.js"></script></body>
+</html>

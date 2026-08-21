@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport"/>
+<title>CAPITAL Admin · User Details</title>
+<link href="./assets/admin.css?v=12" rel="stylesheet"/>
+</head>
+<body data-page="user">
+<div class="admin-app">
+<main class="main">
+<header class="topbar">
+<div class="topbar-left"><button aria-label="Open menu" class="menu-btn" type="button">☰</button><strong>User Details</strong></div>
+<a class="btn secondary" href="../frontend/index.html">View site</a>
+</header>
+<section class="page user-details-page">
+<div class="page-title">
+<div class="title"><h1>User Details</h1><p>Complete account, financial, referral, wallet and security overview</p></div>
+<div class="actions"><a class="btn secondary" href="./users.html">Back to Users</a></div>
+</div>
+
+<section class="card user-details-card">
+<div class="section-head"><div><h2>User Information</h2><p class="section-note">Core identity and account status</p></div></div>
+<div class="detail-list">
+<div class="detail-item"><span>Name</span><strong>Ali Rahimi</strong></div>
+<div class="detail-item"><span>Email</span><strong>ali@example.com</strong></div>
+<div class="detail-item"><span>User ID</span><strong>USR-preview-001</strong></div>
+<div class="detail-item"><span>Account Status</span><span class="badge success">Active</span></div>
+<div class="detail-item"><span>Registration Date</span><strong>10 Aug 2026</strong></div>
+</div>
+</section>
+
+<section class="card user-details-card">
+<div class="section-head"><div><h2>Financial Status</h2><p class="section-note">Deposits, investment, profit and withdrawal overview</p></div></div>
+<div class="detail-list">
+<div class="detail-item"><span>Deposit Amount</span><strong>800 USDT</strong></div>
+<div class="detail-item"><span>Transaction ID (TXID)</span><strong class="break-value">TFLx8f2a91c4e7d0b6a1</strong></div>
+<div class="detail-item"><span>VIP Level</span><span class="vip-badge">◆ VIP 3</span></div>
+<div class="detail-item"><span>Direct Referral Capital</span><strong>300 USDT</strong></div>
+<div class="detail-item"><span>Total Profit</span><strong class="amount-positive">96.40 USDT</strong></div>
+<div class="detail-item"><span>Available for Withdrawal</span><strong>500 USDT</strong></div>
+<div class="detail-item"><span>Pending Withdrawal</span><strong>0 USDT</strong></div>
+<div class="detail-item"><span>Total Withdrawals</span><strong>250 USDT</strong></div>
+<div class="detail-item"><span>Withdrawal Network</span><strong>TRC20</strong></div>
+<div class="detail-item"><span>Withdrawal Address</span><strong class="break-value">TFLkxFWGRQqS8rdiEbPFPqWrbke7fssf5c</strong></div>
+</div>
+</section>
+
+<section class="card user-details-card">
+<div class="section-head"><div><h2>Referral</h2><p class="section-note">Referral ownership and team performance</p></div></div>
+<div class="detail-list">
+<div class="detail-item"><span>Referral ID</span><strong>CAP-7K4M2Q8P</strong></div>
+<div class="detail-item"><span>Direct Referrer</span><strong>CAP-2A8D91XZ</strong></div>
+<div class="detail-item"><span>Direct Subordinates</span><strong>4</strong></div>
+<div class="detail-item"><span>Total Team</span><strong>17</strong></div>
+<div class="detail-item"><span>Referral Income</span><strong class="amount-positive">42.50 USDT</strong></div>
+</div>
+</section>
+
+<section class="card user-details-card">
+<div class="section-head"><div><h2>Wallet</h2><p class="section-note">Withdrawal wallet configuration</p></div></div>
+<div class="detail-list">
+<div class="detail-item"><span>Withdrawal Network</span><strong>TRC20</strong></div>
+<div class="detail-item detail-item-wide"><span>Withdrawal Address</span><strong class="break-value">TFLkxFWGRQqS8rdiEbPFPqWrbke7fssf5c</strong></div>
+</div>
+<div class="user-action-row"><button class="btn secondary" data-user-action="wallet" type="button">Change Withdrawal Address</button></div>
+</section>
+
+<section class="card user-details-card">
+<div class="section-head"><div><h2>Security</h2><p class="section-note">Account password management</p></div></div>
+<div class="security-row"><span class="security-description">Password reset is available without exposing the current password.</span><button class="btn danger" data-user-action="reset" type="button">Change Password</button></div>
+</section>
+</section>
+</main>
+</div>
+<script src="./assets/admin.js?v=12"></script>
+</body>
+</html>

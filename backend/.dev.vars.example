@@ -1,0 +1,6 @@
+ADMIN_EMAIL=admin@example.com
+ADMIN_PASSWORD=CHANGE_THIS_STRONG_PASSWORD
+PUBLIC_BASE_URL=https://capital.example.com
+RESEND_API_KEY=
+RESEND_FROM=CAPITAL <onboarding@example.com>
+ALLOWED_ORIGIN=https://capital.example.com

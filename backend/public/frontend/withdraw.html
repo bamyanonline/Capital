@@ -1,0 +1,21 @@
+<!doctype html>
+<html dir="rtl" lang="fa"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>CAPITAL | Withdraw</title><link href="assets/style.css" rel="stylesheet"/></head><body><div class="app"><main class="container" data-page-main="true">
+<section class="hero"><h1 data-t="withdraw">برداشت</h1><p>درخواست برداشت از سود محاسبه می‌شود؛ اصل سرمایه تا پایان پلن محفوظ است.</p></section>
+<section class="form withdrawal-form">
+<div class="balance-card"><span>مبلغ قابل برداشت</span><strong id="withdrawableBalance">0.00 USDT</strong></div>
+<label for="withdrawAmount">مبلغ برداشت (USDT)</label>
+<div class="input-with-action"><input id="withdrawAmount" min="10" placeholder="مبلغ مورد نظر برای برداشت را وارد کنید" step="0.01" type="number"/><button class="mini-btn" data-action="setMaxWithdraw" data-action-args="" type="button">حداکثر</button></div>
+<div aria-label="قوانین برداشت" class="withdraw-rules">
+<div><span>کارمزد برداشت</span><strong>۱۰٪</strong></div>
+<div><span>حداقل برداشت بر اساس VIP</span><strong id="withdrawMinAmount">—</strong></div>
+<p id="withdrawVipNote">حداقل برداشت بر اساس میزان سرمایه‌گذاری و سطح VIP فعال شما تعیین می‌شود.</p>
+</div>
+<label for="withdrawNetwork">شبکه برداشت</label>
+<select disabled="" id="withdrawNetwork"><option selected="">TRC20 — USDT</option></select>
+<label for="withdrawAddress">آدرس کیف پول مقصد</label>
+<input id="withdrawAddress" placeholder="آدرس برداشت را ابتدا در Profile ثبت کنید" readonly="" type="text"/>
+<div class="permanent-warning"><strong>⚠️ آدرس برداشت ثبت‌شده</strong><p>آدرس برداشت از بخش «مدیریت مالی» در Profile دریافت می‌شود و پس از ثبت، به‌صورت دائمی برای حساب شما نگهداری خواهد شد.</p></div>
+<div class="summary-card"><div><span>مبلغ درخواست</span><b id="summaryAmount">0.00 USDT</b></div><div><span>شبکه</span><b>TRC20</b></div><div><span>کارمزد برداشت (۱۰٪)</span><b id="summaryFee">0.00 USDT</b></div><div><span>مبلغ دریافتی نهایی</span><b id="summaryReceive">0.00 USDT</b></div></div>
+<button class="btn withdraw-submit" data-action="submitWithdrawal" data-action-args="" type="button">ثبت درخواست برداشت</button>
+</section>
+</main></div><div class="toast"></div><script src="assets/api.js"></script><script src="assets/i18n.js"></script><script src="assets/layout.js"></script><script src="assets/app.js"></script></body></html>

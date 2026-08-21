@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport"/><title>CAPITAL Admin · Settings</title><link href="./assets/admin.css?v=12" rel="stylesheet"/></head>
+<body data-page="settings"><div class="admin-app">
+<main class="main"><header class="topbar"><div class="topbar-left"><button aria-label="Open menu" class="menu-btn" type="button">☰</button><strong>Settings</strong></div><a class="btn secondary" href="../frontend/index.html">View site</a></header>
+<section class="page"><div class="page-title"><div class="title"><h1>Settings</h1><p>Admin workspace preferences</p></div></div><div class="card card-stack"><div class="section-head"><div><h2>Language</h2><p>Admin language changes instantly across all Admin pages.</p></div></div><div class="field"><label>Language</label><select aria-label="Language" class="input" data-admin-language=""><option value="en">English</option><option value="fa">Persian</option></select></div></div>
+<div class="card card-stack">
+<div class="form-grid">
+<div class="field"><label>Admin name</label><input class="input" value="Administrator"/></div>
+<div class="field"><label>Timezone</label><select class="input"><option>Asia/Kabul</option><option>UTC</option></select></div>
+</div>
+<hr class="section-divider"/>
+<div class="section-heading"><h2>Frontend Deposit Settings</h2><p>These values are used on the Frontend Deposit page.</p></div>
+<div class="form-grid">
+<div class="field"><label for="depositNetworkSetting">Deposit network</label>
+<select class="input" id="depositNetworkSetting">
+<option value="TRC20">TRC20 — USDT</option>
+<option value="ERC20">ERC20 — USDT</option>
+<option value="BEP20">BEP20 — USDT</option>
+<option value="POLYGON">Polygon — USDT</option>
+<option value="SOLANA">Solana — USDT</option>
+</select></div>
+<div class="field"><label for="depositAddressSetting">Deposit address</label><input autocomplete="off" class="input" id="depositAddressSetting" placeholder="Enter deposit address" type="text"/></div>
+</div>
+<div class="field"><label for="depositQrSetting">Deposit QR image</label>
+<input accept="image/png,image/jpeg,image/webp" class="input" id="depositQrSetting" type="file"/>
+<div class="setting-preview"><img alt="Deposit QR preview" hidden="" id="depositQrPreview"/><span id="depositQrEmpty">No custom QR uploaded. Current Frontend QR will be used.</span></div>
+<button class="btn secondary" id="removeDepositQr" type="button">Use default QR</button>
+</div>
+<div class="actions"><button class="btn" id="saveDepositSettings" type="button">Save Deposit Settings</button><button class="btn secondary logout" type="button">Sign out</button></div>
+<div aria-live="polite" class="settings-status" id="depositSettingsStatus" role="status"></div>
+</div>
+<div class="card card-stack" id="adminManagersSection">
+<div class="section-head"><div><h2>Admin Managers</h2><p>Add or remove team members with limited Admin permissions.</p></div></div>
+<div class="admin-manager-list" id="adminManagerList"></div>
+<div class="manager-form">
+<div class="form-grid">
+<div class="field"><label for="managerName">Full name</label><input class="input" id="managerName" placeholder="e.g. Ahmad Rahimi" type="text"/></div>
+<div class="field"><label for="managerEmail">Email</label><input class="input" id="managerEmail" placeholder="manager@example.com" type="email"/></div>
+</div>
+<div class="field">
+<label>Permissions</label>
+<div class="manager-permissions">
+<label class="permission-check"><input data-manager-permission="" type="checkbox" value="users"/> Users</label>
+<label class="permission-check"><input data-manager-permission="" type="checkbox" value="deposits"/> Deposits</label>
+<label class="permission-check"><input data-manager-permission="" type="checkbox" value="withdrawals"/> Withdrawals</label>
+<label class="permission-check"><input data-manager-permission="" type="checkbox" value="transactions"/> Transactions</label>
+<label class="permission-check"><input data-manager-permission="" type="checkbox" value="plans"/> Plans</label>
+<label class="permission-check"><input data-manager-permission="" type="checkbox" value="announcements"/> Announcements</label>
+<label class="permission-check"><input data-manager-permission="" type="checkbox" value="activity"/> Activity</label>
+<label class="permission-check"><input data-manager-permission="" type="checkbox" value="settings"/> Settings</label>
+</div>
+</div>
+<div class="actions manager-actions"><button class="btn" id="addAdminManager" type="button">Add Admin</button></div>
+<div aria-live="polite" class="settings-status" id="adminManagerStatus" role="status"></div>
+</div>
+</div>
+</section></main></div>
+<script src="./assets/admin.js?v=12"></script></body></html>
