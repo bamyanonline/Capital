@@ -5,7 +5,7 @@
   "compatibility_date": "2026-08-18",
   "compatibility_flags": ["nodejs_compat"],
   "vars": {
-    "ALLOWED_ORIGIN": "https://capitalism.pages.dev",
+    "ALLOWED_ORIGINS": "https://capitalism.pages.dev,https://capitalism-admin.pages.dev",
     "PUBLIC_BASE_URL": "https://capitalism.pages.dev"
   },
   "observability": {

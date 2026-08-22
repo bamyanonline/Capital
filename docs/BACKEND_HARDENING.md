@@ -7,7 +7,7 @@
 - Existing authentication endpoints and Cloudflare Worker/D1 architecture.
 
 ## Hardened
-1. Strict Origin/CORS handling: no arbitrary `Origin` reflection when `ALLOWED_ORIGIN` is absent.
+1. Strict Origin/CORS handling: no arbitrary `Origin` reflection when `ALLOWED_ORIGINS` is absent.
 2. Secure cookies on HTTPS with `Secure`, `HttpOnly`, `SameSite=Lax`.
 3. Session sliding expiration and invalid-session cleanup.
 4. Admin session sliding expiration.

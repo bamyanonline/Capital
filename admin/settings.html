@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html dir="ltr" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport"/><title>CAPITAL Admin · Settings</title><link href="./assets/admin.css?v=12" rel="stylesheet"/></head>
 <body data-page="settings"><div class="admin-app">
-<main class="main"><header class="topbar"><div class="topbar-left"><button aria-label="Open menu" class="menu-btn" type="button">☰</button><strong>Settings</strong></div><a class="btn secondary" href="../frontend/index.html">View site</a></header>
+<main class="main"><header class="topbar"><div class="topbar-left"><button aria-label="Open menu" class="menu-btn" type="button">☰</button><strong>Settings</strong></div><a class="btn secondary" href="https://capitalism.pages.dev/">View site</a></header>
 <section class="page"><div class="page-title"><div class="title"><h1>Settings</h1><p>Admin workspace preferences</p></div></div><div class="card card-stack"><div class="section-head"><div><h2>Language</h2><p>Admin language changes instantly across all Admin pages.</p></div></div><div class="field"><label>Language</label><select aria-label="Language" class="input" data-admin-language=""><option value="en">English</option><option value="fa">Persian</option></select></div></div>
 <div class="card card-stack">
 <div class="form-grid">
@@ -21,8 +21,8 @@
 </select></div>
 <div class="field"><label for="depositAddressSetting">Deposit address</label><input autocomplete="off" class="input" id="depositAddressSetting" placeholder="Configured securely in Worker secret" type="text" readonly/></div>
 </div>
-<div class="form-grid"><div class="field"><label for="withdrawalFeeSetting">Withdrawal fee</label><input class="input" id="withdrawalFeeSetting" type="number" step="0.01" min="0" value="0.10"/></div><div class="field"><label for="withdrawalStartSetting">Withdrawal start (local minutes)</label><input class="input" id="withdrawalStartSetting" type="number" min="0" max="1439" value="480"/></div><div class="field"><label for="withdrawalEndSetting">Withdrawal end (local minutes)</label><input class="input" id="withdrawalEndSetting" type="number" min="0" max="1439" value="960"/></div><div class="field"><label for="withdrawalMinimumSetting">Minimum remaining balance</label><input class="input" id="withdrawalMinimumSetting" type="number" step="0.01" min="0" value="20"/></div></div>
-<div class="actions"><button class="btn" id="saveDepositSettings" type="button">Save Deposit Settings</button><button class="btn secondary logout" type="button">Sign out</button></div>
+<div class="form-grid"><div class="field"><label for="withdrawalFeeSetting">Withdrawal fee</label><input class="input" id="withdrawalFeeSetting" type="number" step="0.01" min="0" value="0.10" readonly/></div><div class="field"><label for="withdrawalStartSetting">Withdrawal start (local minutes)</label><input class="input" id="withdrawalStartSetting" type="number" min="0" max="1439" value="480" readonly/></div><div class="field"><label for="withdrawalEndSetting">Withdrawal end (local minutes)</label><input class="input" id="withdrawalEndSetting" type="number" min="0" max="1439" value="960" readonly/></div><div class="field"><label for="withdrawalMinimumSetting">Minimum remaining balance</label><input class="input" id="withdrawalMinimumSetting" type="number" step="0.01" min="0" value="20" readonly/></div></div>
+<div class="section-note">Financial rules are fixed by the production business rules and cannot be changed from Admin.</div><div class="actions"><button class="btn" id="saveDepositSettings" type="button" disabled>Financial Rules Locked</button><button class="btn secondary logout" type="button">Sign out</button></div>
 <div aria-live="polite" class="settings-status" id="depositSettingsStatus" role="status"></div>
 </div>
 <div class="card card-stack" id="adminManagersSection">

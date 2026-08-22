@@ -18,7 +18,7 @@
 
 - Only these five exact deposit amounts are valid.
 - A user may have only one investment.
-- A rejected deposit may be corrected/resubmitted by reusing the same deposit record; a second independent deposit is not created.
+- A rejected deposit may be submitted again as a new request with a new transaction identifier; only one approved investment may exist per user.
 - Deposit approval activates the matching VIP automatically.
 - No compound interest exists. Daily profit is always calculated from the original approved investment.
 - The original investment is never increased by accumulated profits.
@@ -31,13 +31,10 @@
 ## 4. Deposit Timing — Afghanistan Time
 Financial timezone: `Asia/Kabul`.
 
-- Deposit time, not Admin approval time, determines whether the deposit qualifies for same-day treatment.
-- Deposit before 16:00:
-  - If approved on the same Afghanistan calendar day, that day's fixed daily profit is credited once as the initial same-day profit event.
-  - If approved on a later day, no retroactive profit is created for days already elapsed; the first new daily profit begins on the next Afghanistan financial day at 00:00 after approval.
-- Deposit after 16:00:
-  - No daily profit is paid for the deposit day, even if Admin approves it that same day.
-  - First daily profit starts on the following Afghanistan financial day at 00:00.
+- Deposit before 16:00 is eligible starting from the next Afghanistan financial day, but never before Admin approval.
+- Deposit after 16:00 is eligible starting from the next Afghanistan financial day, again only after Admin approval.
+- Admin approval never creates retroactive profit for a financial day whose 00:00 has already passed.
+- The first daily profit is therefore the later of: the deposit's eligible financial date and the financial day after approval.
 - Later daily profits are posted once per financial day at 00:00 Afghanistan time.
 
 ## 5. Daily Profit
@@ -70,7 +67,7 @@ Financial timezone: `Asia/Kabul`.
 
 ## 9. Balance Model
 - `Original Investment` is the fixed principal used for all plan/profit/cap calculations.
-- `Available Balance` is the spendable profit-side balance and can become negative.
+- `Available Balance` is the spendable profit-side balance and can become negative after a required referral reversal.
 - `Balance` is the accounting total: original investment + net credited profits/bonuses/reversals - approved withdrawals.
 - Daily Profit, Team Profit and Referral Bonus increase Available Balance and Balance.
 - Referral reversal decreases Available Balance and Balance.
@@ -170,7 +167,7 @@ Ledger entries contain an ID, user, type, amount, reference, metadata and timest
 - Active: normal operation under all applicable financial rules.
 - Suspended/Blocked/Deactivated: account access is disabled and financial history is preserved; no new user profit is generated while inactive.
 - Reactivation does not back-pay the inactive period; new Daily/Team Profit resumes from the next Afghanistan financial day at 00:00.
-- Delete is permanent under this business rule: the user's account and all associated financial history are removed.
+- Delete is a permanent business-state action. The system keeps the financial history for auditability and marks the account as blocked with a `deleted_at` timestamp; deleted accounts cannot log in or be reactivated.
 
 ## 19. Afghanistan Financial Clock
 All of the following use `Asia/Kabul`:

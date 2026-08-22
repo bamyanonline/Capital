@@ -18,3 +18,18 @@ Never edit `backend/public/frontend` or `backend/public/admin` directly. Edit th
 
 ## Data authority
 Financial balances, deposits, withdrawals, referral rewards, profit calculations, permissions and security decisions are server-authoritative. Browser storage is not a financial source of truth.
+
+
+## UI styling architecture
+
+The project has one CSS source of truth per UI surface:
+
+- Customer frontend: `frontend/assets/style.css`
+- Admin console: `admin/assets/admin.css`
+- `backend/public/frontend` and `backend/public/admin` are generated deployment copies and must never be edited directly.
+
+All customer pages reference the same frontend stylesheet and all admin pages reference the same admin stylesheet. Page-specific rules belong in the shared stylesheet under a clearly named component section; inline `<style>` blocks are prohibited. A single design-token change in the appropriate shared stylesheet therefore propagates to every page in that surface after `npm run sync:public`.
+
+Backend architecture keeps financial rules server-authoritative. Browser code only calls relative `/api/*` endpoints; the Pages Function proxies those requests to the Worker. D1 is the financial persistence layer, the Worker is the authoritative business-rule layer, and the generated `backend/public` tree is deployment-only.
+
+Financial operations are additionally tracked through ledger entries, cap history, job-run records, wallet-change history, and reconciliation issues.

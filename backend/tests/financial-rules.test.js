@@ -1,9 +1,13 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
+import { __test } from '../worker.js';
 
 const plans = {1:{amount:100,daily:1.10},2:{amount:200,daily:2.40},3:{amount:300,daily:3.90},4:{amount:400,daily:5.60},5:{amount:500,daily:7.50}};
 const teamRate = 0.001;
 const referralRate = 0.05;
+const workerPath = path.join(process.cwd(), 'worker.js');
 
 function cap(principal, team){ return team >= principal * 3 ? 'NO_CAP' : 'LIMITED_100'; }
 function referral(amount){ return amount * referralRate; }
@@ -13,7 +17,6 @@ for (const [vip, p] of Object.entries(plans)) {
   test(`VIP${vip} uses fixed principal and no compounding`, () => {
     assert.equal(p.amount, Number(vip) * 100);
     assert.equal(p.daily, [null,1.10,2.40,3.90,5.60,7.50][Number(vip)]);
-    assert.equal(p.daily, p.daily);
   });
 }
 
@@ -39,4 +42,56 @@ test('CAP user ID format is exactly CAP plus five uppercase alphanumeric charact
 test('20 USDT Available Balance reserve is mandatory', () => {
   assert.equal(50 - 30 >= 20, true);
   assert.equal(50 - 31 >= 20, false);
+});
+
+test('only active direct referrals count toward the 3x cap threshold', () => {
+  const worker = fs.readFileSync(workerPath, 'utf8');
+  assert.match(worker, /FROM users WHERE referred_by=\? AND status='active'/);
+});
+
+test('first profit cannot be paid on the same calendar day approval occurs', () => {
+  const worker = fs.readFileSync(workerPath, 'utf8');
+  assert.match(worker, /const first=\[depositEligibleDate,addLocalDays\(approvalDate,1\)\]\.sort\(\)\[1\]/);
+});
+
+test('withdrawal lifecycle keeps approval separate from blockchain completion', () => {
+  const worker = fs.readFileSync(workerPath, 'utf8');
+  assert.match(worker, /status='approved',blockchain_status='awaiting_broadcast'/);
+  assert.match(worker, /status='completed',blockchain_status='confirmed'/);
+  assert.match(worker, /status='rejected',blockchain_status='failed'/);
+});
+
+test('late deposit approval cannot back-pay profit before approval day ends', () => {
+  const worker = fs.readFileSync(workerPath, 'utf8');
+  assert.match(worker, /addLocalDays\(approvalDate,1\)/);
+  assert.match(worker, /const sameDay=false/);
+});
+
+
+test('Afghanistan withdrawal window is second-precise', () => {
+  const openAtStart = new Date('2026-08-21T03:30:00.000Z'); // 08:00:00 Kabul
+  const openAtEnd = new Date('2026-08-21T11:30:00.000Z');   // 16:00:00 Kabul
+  const closedAfterEnd = new Date('2026-08-21T11:30:01.000Z');
+  assert.equal(__test.withdrawalWindowOpen(openAtStart), true);
+  assert.equal(__test.withdrawalWindowOpen(openAtEnd), true);
+  assert.equal(__test.withdrawalWindowOpen(closedAfterEnd), false);
+});
+
+test('deposit cutoff is second-precise at exactly 16:00:00 Kabul', () => {
+  assert.equal(__test.beforeOrAtDepositCutoff(new Date('2026-08-21T11:30:00.000Z')), true);
+  assert.equal(__test.beforeOrAtDepositCutoff(new Date('2026-08-21T11:30:01.000Z')), false);
+});
+
+test('NO_CAP becomes withdrawal-effective only at its scheduled financial-day boundary', () => {
+  const future = __test.capWithdrawalStatus({invested_capital_micro:500_000_000,cap_status:'NO_CAP',cap_eligible_at:'2026-08-22T00:00:00.000Z'}, new Date('2026-08-21T23:59:59.999Z'));
+  const active = __test.capWithdrawalStatus({invested_capital_micro:500_000_000,cap_status:'NO_CAP',cap_eligible_at:'2026-08-22T00:00:00.000Z'}, new Date('2026-08-22T00:00:00.000Z'));
+  assert.equal(future, 'LIMITED_100');
+  assert.equal(active, 'NO_CAP');
+});
+
+test('production approval claims withdrawal before dependent user mutation', () => {
+  const worker = fs.readFileSync(workerPath, 'utf8');
+  const claim = worker.indexOf("UPDATE withdrawals SET status='approved'");
+  const userUpdate = worker.indexOf('UPDATE users SET reserved_withdrawal_micro=reserved_withdrawal_micro-?');
+  assert.ok(claim > 0 && userUpdate > claim);
 });

@@ -15,20 +15,20 @@ test('release package has no preview navigation or non-production compatibility 
   assert.equal(text.includes('assets.html?'+ 'preview=1'),false);
 });
 
+test('release contains no bundled inspection credential seed',()=>{
+  const files=allFiles(root).filter(f=>/\.(html|js|jsonc|sql|md)$/.test(f) && !f.endsWith('backend/migrations/0011_remove_legacy_access.sql') && !f.includes('backend/tests/'));
+  const text=files.map(f=>fs.readFileSync(f,'utf8')).join('\n');
+  assert.doesNotMatch(text,/nacam@gmail\.com/i);
+  assert.doesNotMatch(text,/ADM_NACAM/);
+  assert.doesNotMatch(text,/CAPNACAM/);
+});
+
 test('frontend has Spanish locale and English-digit normalization',()=>{
   const i18n=fs.readFileSync(path.join(root,'frontend/assets/i18n.js'),'utf8');
   const app=fs.readFileSync(path.join(root,'frontend/assets/app.js'),'utf8');
   assert.match(i18n,/Object\.assign\(langs\.es/);
   assert.match(i18n,/normalizeEnglishDigits/);
   assert.match(app,/normalizeDisplayedDigits/);
-});
-
-test('requested inspection accounts are seeded as hashes only',()=>{
-  const m=fs.readFileSync(path.join(root,'backend/migrations/0007_access_accounts.sql'),'utf8');
-  assert.match(m,/nacam@gmail\.com/);
-  assert.match(m,/pbkdf2\$/);
-  assert.match(m,/pbkdf2\$[0-9a-f]+\$[0-9a-f]+/);
-  assert.equal(m.includes('34'+'A092'),false);
 });
 
 test('admin remains bilingual English/Persian only',()=>{

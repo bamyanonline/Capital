@@ -1,5 +1,5 @@
 /* CAPITAL Production API adapter. Financial state never lives in browser storage. */
-window.CAPITAL_CONFIG = window.CAPITAL_CONFIG || { mode: 'backend', apiBaseUrl: '', sessionMinutes: 30, deposit: {network:'TRC20',currency:'USDT',minAmount:100}, withdrawal:{network:'TRC20',currency:'USDT'} };
+window.CAPITAL_CONFIG = window.CAPITAL_CONFIG || { mode: 'backend', apiBaseUrl: '', sessionMinutes: 30, deposit: {network:'TRC20',currency:'USDT',minAmount:100}, withdrawal:{network:'TRC20',currency:'USDT',fee:0.10,minimumRemaining:20,window:{start:480,end:960}} };
 (function(){
   'use strict';
   const safeEmail=v=>String(v||'').trim().toLowerCase();
@@ -19,7 +19,7 @@ window.CAPITAL_CONFIG = window.CAPITAL_CONFIG || { mode: 'backend', apiBaseUrl: 
     teamStats(){return request('/api/profile/team')}, listNotifications(){return request('/api/notifications')}, markNotificationRead(id){return request('/api/notifications/'+encodeURIComponent(id)+'/read',{method:'POST'})},
     listDeposits(){return request('/api/deposits')}, createDeposit(p){return request('/api/deposits',{method:'POST',headers:{'Idempotency-Key':p.idempotencyKey||crypto.randomUUID()},body:JSON.stringify(p)})},
     listWithdrawals(){return request('/api/withdrawals')}, createWithdrawal(p){return request('/api/withdrawals',{method:'POST',headers:{'Idempotency-Key':p.idempotencyKey||crypto.randomUUID()},body:JSON.stringify(p)})},
-    listHistory(){return request('/api/history')}, activatePlan(amount,vip){return request('/api/plans/activate',{method:'POST',body:JSON.stringify({amount,vip})})},
+    listHistory(){return request('/api/history')},
     requestPasswordReset(email){return request('/api/auth/request-reset',{method:'POST',body:JSON.stringify({email:safeEmail(email)})})}, resetPassword(token,newPassword){return request('/api/auth/reset-password',{method:'POST',body:JSON.stringify({token,newPassword})})},
     logout(){return request('/api/auth/logout',{method:'POST'}).catch(()=>true)}
   };

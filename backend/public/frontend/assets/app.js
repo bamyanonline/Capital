@@ -34,7 +34,7 @@ function setLang(k){
 function selectLang(e){const v=e?.target?.value||document.querySelector("#language,[data-capital-language]")?.value;if(v)setLang(v)}
 function extraText(key){
   const map={
-    en:{adminReserved:"This email is reserved.",emailExists:"This email is already registered.",minAmount:"Minimum amount is 100 USDT.",inactive:"Activate plan",pending:"Pending",verified:"Verified",rejected:"Rejected",depositType:"Deposit",withdrawType:"Withdrawal",profitType:"Daily profit",completed:"Completed",unverified:"Awaiting verification",walletSaved:"Withdrawal address saved successfully ✓",invalidWallet:"Please enter a valid TRC20 address."},
+    en:{adminReserved:"This email is reserved.",emailExists:"This email is already registered.",minAmount:"Minimum amount is 100 USDT.",inactive:"Deposit to activate",pending:"Pending",verified:"Verified",rejected:"Rejected",depositType:"Deposit",withdrawType:"Withdrawal",profitType:"Daily profit",completed:"Completed",unverified:"Awaiting verification",walletSaved:"Withdrawal address saved successfully ✓",invalidWallet:"Please enter a valid TRC20 address."},
     fr:{adminReserved:"Cet e-mail est réservé.",emailExists:"Cet e-mail est déjà enregistré.",minAmount:"Le montant minimum est de 100 USDT.",inactive:"Activer le plan",pending:"En attente",verified:"Vérifié",rejected:"Rejeté",depositType:"Dépôt",withdrawType:"Retrait",profitType:"Profit quotidien",completed:"Terminé",unverified:"Vérification en attente",walletSaved:"Adresse de retrait enregistrée ✓",invalidWallet:"Veuillez saisir une adresse TRC20 valide."},
     ru:{adminReserved:"Этот e-mail зарезервирован.",emailExists:"Этот e-mail уже зарегистрирован.",minAmount:"Минимальная сумма — 100 USDT.",inactive:"Активировать план",pending:"В ожидании",verified:"Подтверждено",rejected:"Отклонено",depositType:"Пополнение",withdrawType:"Вывод",profitType:"Дневная прибыль",completed:"Завершено",unverified:"Ожидает проверки",walletSaved:"Адрес вывода сохранён ✓",invalidWallet:"Введите корректный адрес TRC20."},
     ar:{adminReserved:"هذا البريد محجوز.",emailExists:"هذا البريد مسجل بالفعل.",minAmount:"الحد الأدنى هو 100 USDT.",inactive:"تفعيل الخطة",pending:"قيد الانتظار",verified:"تم التحقق",rejected:"مرفوض",depositType:"إيداع",withdrawType:"سحب",profitType:"الربح اليومي",completed:"مكتمل",unverified:"بانتظار التحقق",walletSaved:"تم حفظ عنوان السحب ✓",invalidWallet:"أدخل عنوان TRC20 صالحاً."},
@@ -69,8 +69,6 @@ async function register(e){
 async function logout(){try{await CapitalAPI.logout()}finally{location.href="index.html"}}
 function copyAddress(){const a=document.querySelector("#depositAddress")?.value||CapitalAPI.config.deposit.address;navigator.clipboard?.writeText(a);toast(lang().copy+" ✓")}
 function activeVip(user){return Number(user?.activePlan?.vip||0)}
-async function activatePlan(amount,vip){
-  try{await CapitalAPI.activatePlan(amount,vip);await refreshUserUI();toast(lang().activePlan+" ✓")}
   catch(err){toast(uiError(err))}
 }
 async function currentUser(){try{return await CapitalAPI.me()}catch(_){return null}}
@@ -124,15 +122,15 @@ async function syncServerConfig(){try{const c=await CapitalAPI.config();CAPITAL_
 function startSession(){let timer;const reset=()=>{clearTimeout(timer);timer=setTimeout(async()=>{if(await CapitalAPI.isAuthenticated()){await CapitalAPI.logout();if(!location.pathname.endsWith("index.html")&&location.pathname!=="/")location.href="index.html"}},CAPITAL_CONFIG.sessionMinutes*60*1000)};["click","touchstart","mousemove","keydown","scroll"].forEach(x=>addEventListener(x,reset,{passive:true}));reset()}
 async function submitDeposit(){
   const amount=Number(document.querySelector("#depositAmount")?.value||0), txid=(document.querySelector("#depositTxid")?.value||"").trim();
-  if(!amount||amount<CapitalAPI.config.deposit.minAmount)return toast(runtimeText("لطفاً مبلغ واریز را حداقل ۱۰۰ USDT و به‌صورت صحیح وارد کنید."));
+  const allowed=[100,200,300,400,500];if(!allowed.includes(amount))return toast(runtimeText("مبلغ واریز باید دقیقاً یکی از 100، 200، 300، 400 یا 500 USDT باشد."));
   if(!txid)return toast(extraText("pending")+" — "+extraText("unverified"));
   try{await CapitalAPI.createDeposit({amount,txid,network:CapitalAPI.config.deposit.network,currency:CapitalAPI.config.deposit.currency,toAddress:CapitalAPI.config.deposit.address});toast(runtimeText("درخواست واریز ثبت شد و تا تأیید مدیر به موجودی اضافه نمی‌شود ✓"));document.querySelector("#depositAmount").value="";document.querySelector("#depositTxid").value="";await renderHistory()}catch(err){toast(uiError(err))}
 }
 function withdrawRulesForVip(vip){const rules={1:10,2:20,3:30,4:40,5:50};return rules[Number(vip)]||0}
-function updateWithdrawSummary(){const amount=Math.max(0,Number(document.querySelector("#withdrawAmount")?.value||0)),fee=amount*0.10,receive=Math.max(0,amount-fee);const a=document.querySelector("#summaryAmount"),f=document.querySelector("#summaryFee"),r=document.querySelector("#summaryReceive");if(a)a.textContent=money(amount);if(f)f.textContent=money(fee);if(r)r.textContent=money(receive)}
+function updateWithdrawSummary(){const amount=Math.max(0,Number(document.querySelector("#withdrawAmount")?.value||0)),fee=amount*Number(CAPITAL_CONFIG.withdrawal?.fee??0.10),receive=Math.max(0,amount-fee);const a=document.querySelector("#summaryAmount"),f=document.querySelector("#summaryFee"),r=document.querySelector("#summaryReceive");if(a)a.textContent=money(amount);if(f)f.textContent=money(fee);if(r)r.textContent=money(receive)}
 async function refreshWithdrawUI(){
   const [d,user]=await Promise.all([CapitalAPI.dashboard(),CapitalAPI.me()]);
-  const el=document.querySelector("#withdrawableBalance");if(el)el.textContent=money(d?.available||0);
+  const el=document.querySelector("#withdrawableBalance");if(el)el.textContent=money(d?.withdrawableAvailable||0);
   const vip=activeVip(user),min=withdrawRulesForVip(vip),amount=document.querySelector("#withdrawAmount"),minEl=document.querySelector("#withdrawMinAmount"),note=document.querySelector("#withdrawVipNote");
   if(amount){amount.min=min>0?String(min):"0";amount.setAttribute("data-vip-min",String(min))}
   if(minEl)minEl.textContent=min>0?("VIP "+vip+" — "+money(min)):"—";
@@ -140,7 +138,7 @@ async function refreshWithdrawUI(){
   const wallet=await CapitalAPI.wallet();const addr=document.querySelector("#withdrawAddress");if(addr){addr.value=wallet||"";addr.readOnly=true;if(wallet)addr.classList.add("locked-address")}
   updateWithdrawSummary()
 }
-async function setMaxWithdraw(){const d=await CapitalAPI.dashboard();const amount=document.querySelector("#withdrawAmount");if(amount)amount.value=Number(d?.available||0).toFixed(2);updateWithdrawSummary()}
+async function setMaxWithdraw(){const d=await CapitalAPI.dashboard();const amount=document.querySelector("#withdrawAmount");if(amount)amount.value=Number(d?.withdrawableAvailable||0).toFixed(2);updateWithdrawSummary()}
 async function submitWithdrawal(){
   const amount=Number(document.querySelector("#withdrawAmount")?.value||0), wallet=await CapitalAPI.wallet(), user=await CapitalAPI.me(), vip=activeVip(user), min=withdrawRulesForVip(vip);
   if(!vip)return toast(dynamicText("noVip"));
@@ -158,7 +156,7 @@ function setupDeposit(){
     const option=document.createElement("option");
     option.value=network; option.textContent=network+" — USDT"; n.appendChild(option); n.value=network;
   }
-  a.value=settings.address||"";
+  a.value=settings.address||"";const amountInput=document.querySelector('#depositAmount');if(amountInput){amountInput.min='100';amountInput.max='500';amountInput.step='100';}
   const qr=document.querySelector("#depositQrImage");
   if(qr){
     qr.src=settings.qrData||"assets/deposit-qr.jpg";

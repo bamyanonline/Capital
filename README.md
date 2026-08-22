@@ -27,10 +27,10 @@ npm run verify
 ## Deploy
 
 1. Create a Cloudflare D1 database and put its real `database_id` in `backend/wrangler.jsonc`.
-3. Configure production secrets in Cloudflare.
-4. Apply migrations with `npm run migrate:remote`.
-5. Run `npm run verify`.
-6. Run `npm run deploy`.
+2. Configure production secrets in Cloudflare.
+3. Apply migrations with `npm run migrate:remote`.
+4. Run `npm run verify`.
+5. Run `npm run deploy`.
 
 See [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md).
 
