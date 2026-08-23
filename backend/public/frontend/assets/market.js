@@ -1,6 +1,6 @@
 /* CAPITAL Market Controller
  * Single responsibility: fetch market snapshots, render one semantic table,
- * and patch live Binance prices without rebuilding the DOM.
+ * and refresh public market snapshots without a fragile browser WebSocket.
  */
 (function () {
   "use strict";
@@ -16,9 +16,8 @@
   const LOCALES = {fa:"en-US",ar:"en-US",ur:"en-US",en:"en-US",fr:"en-US",ru:"en-US",zh:"en-US",es:"en-US"};
 
   let coins = [];
-  let socket = null;
   let retry = 0;
-  let reconnectTimer = null;
+  let refreshTimer = null;
 
   const locale = () => "en-US";
 
@@ -153,7 +152,8 @@
       const response = await fetch("/api/market", { cache: "no-store", credentials: "same-origin" });
       if (!response.ok) throw new Error("MARKET_API");
 
-      const fresh = await response.json();
+      const payload = await response.json();
+      const fresh = Array.isArray(payload) ? payload : payload.data;
       if (!Array.isArray(fresh)) throw new Error("MARKET_DATA");
 
       coins = fresh
@@ -162,68 +162,19 @@
 
       render();
       retry = 0;
-      connect();
+      setStatus("marketLiveStatus");
+      scheduleRefresh();
     } catch (_) {
       if (!coins.length) unavailable();
-      scheduleReconnect();
+      retry = Math.min(retry + 1, 9);
+      scheduleRefresh();
     }
   }
 
-  function connect() {
-    if (socket) {
-      try { socket.close(); } catch (_) {}
-      socket = null;
-    }
-
-    const streams = COINS
-      .map(([, symbol]) => symbol)
-      .filter(Boolean)
-      .map(symbol => symbol.toLowerCase() + "@ticker")
-      .join("/");
-
-    if (!streams || typeof WebSocket === "undefined") return;
-
-    try {
-      socket = new WebSocket(
-        "wss://stream.binance.com:9443/stream?streams=" + streams
-      );
-
-      socket.onopen = () => {
-        retry = 0;
-        setStatus("marketLiveStatus");
-      };
-
-      socket.onmessage = event => {
-        try {
-          const payload = JSON.parse(event.data);
-          const ticker = payload && payload.data ? payload.data : {};
-          const coin = coins.find(item => {
-            const match = COINS.find(pair => pair[0] === item.id);
-            return match && match[1] === ticker.s;
-          });
-          if (!coin) return;
-
-          coin.current_price = finite(ticker.c);
-          coin.price_change_percentage_24h = finite(ticker.P);
-          patchLiveRow(coin);
-        } catch (_) {}
-      };
-
-      socket.onerror = () => {
-        try { socket.close(); } catch (_) {}
-      };
-
-      socket.onclose = () => scheduleReconnect();
-    } catch (_) {
-      scheduleReconnect();
-    }
-  }
-
-  function scheduleReconnect() {
-    clearTimeout(reconnectTimer);
-    retry = Math.min(retry + 1, 6);
-    const delay = Math.min(30000, 1000 * Math.pow(2, retry - 1));
-    reconnectTimer = setTimeout(connect, delay);
+  function scheduleRefresh() {
+    if (refreshTimer) clearTimeout(refreshTimer);
+    const delay = Math.min(60000, 15000 + retry * 5000);
+    refreshTimer = setTimeout(load, delay);
   }
 
   function clock() {
@@ -235,7 +186,6 @@
   }
 
   setInterval(clock, 1000);
-  setInterval(load, 60000);
   document.addEventListener("capital:language", clock);
   document.addEventListener("DOMContentLoaded", () => {
     clock();

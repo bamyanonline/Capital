@@ -6,7 +6,7 @@ window.CAPITAL_CONFIG = window.CAPITAL_CONFIG || { mode: 'backend', apiBaseUrl: 
   async function request(path, options={}){
     const base=String(CAPITAL_CONFIG.apiBaseUrl||'').replace(/\/$/,'');
     const headers={...(options.body instanceof FormData?{}:{'Content-Type':'application/json'}),...(options.headers||{})};
-    const r=await fetch(base+path,{...options,headers,credentials:'same-origin'});
+    const r=await fetch(base+path,{...options,headers,credentials:'same-origin',cache:'no-store'});
     const data=await r.json().catch(()=>({}));
     if(!r.ok) throw new Error(data.code||data.message||'API_ERROR');
     return data.data ?? data;

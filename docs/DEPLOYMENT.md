@@ -48,9 +48,21 @@ npm run verify
 npm run deploy
 ```
 
-## 8. Future source changes
+## 8. Frontend Pages deployment
 
-Edit only `frontend/` and `admin/`. Then run:
+The customer frontend is hosted by the Cloudflare Pages project `capitalism`. The repository root contains a Pages Function at `functions/api/[[path]].js` that proxies `/api/*` to the `capital-api` Worker. This keeps the browser on the Pages origin while the API remains a separate Worker. Cloudflare Pages Functions use file-based routing, and a double-bracket route matches multiple path segments.
+
+For the Pages project, use `frontend/` as the static build/output directory and deploy the repository root so the `functions/` directory is included. Set the Pages environment variable `CAPITAL_API_ORIGIN` to:
+
+```text
+https://capital-api.bamyanonline.workers.dev
+```
+
+The frontend calls `/api/...` relatively; it must not call the Worker URL directly from browser JavaScript.
+
+## 9. Future source changes
+
+Edit `frontend/`, `admin/`, or `functions/` as appropriate. Then run:
 
 ```bash
 npm run sync:public

@@ -5,7 +5,7 @@ The backend is a Cloudflare Worker API backed by D1.
 - `worker.js`: API and business logic
 - `migrations/`: immutable D1 migration history
 - `tests/`: automated backend/release tests
-- `public/`: synchronized deployment assets generated from the repository root sources
+- `public/`: synchronized release copy retained for packaging; the Worker itself is API-only and does not depend on `ASSETS`
 - `wrangler.jsonc`: Cloudflare Worker/D1 configuration
 
 From the repository root:

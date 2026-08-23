@@ -10,9 +10,10 @@
 Never edit `backend/public/frontend` or `backend/public/admin` directly. Edit the canonical source and run `npm run sync:public`.
 
 ## Cloudflare runtime
-- Worker: `backend/worker.js`
+- Worker: `backend/worker.js` (API + scheduled financial job; no browser assets)
 - D1 binding: `DB`
-- Static assets: `backend/public`
+- Customer website: Cloudflare Pages project `capitalism` using `frontend/` as its static output
+- Pages API proxy: `functions/api/[[path]].js`
 - Scheduled job: configured in `backend/wrangler.jsonc`
 
 ## Data authority
