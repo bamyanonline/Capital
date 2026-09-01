@@ -23,16 +23,12 @@
 14. Safer referral reversal and no negative balances from reversal logic.
 15. Cap-state evaluation avoids resetting cap usage during concurrent evaluations.
 16. Soft-delete for users so financial/audit history is not physically deleted.
-17. KYC API foundation with private R2 object storage support.
-18. KYC file validation, ownership checks, and admin review endpoints.
 19. Cleanup of expired reset tokens and old auth-attempt records.
 20. Private/no-store response headers and HSTS.
 
 ## New migration
 `backend/migrations/0004_backend_hardening.sql`
 
-## KYC storage
-See `backend/R2_KYC_SETUP.md`.
 
 ## Validation performed
 - `node --check backend/worker.js` — passed.
@@ -41,7 +37,6 @@ See `backend/R2_KYC_SETUP.md`.
 
 ## Production dependencies still requiring external configuration
 - Cloudflare D1 production database ID.
-- Private R2 bucket bound as `KYC_BUCKET`.
 - `ADMIN_PASSWORD_HASH` and other secrets.
 - Verified TRON/TRC20 deposit verification provider.
 - Controlled withdrawal signing/broadcast service.

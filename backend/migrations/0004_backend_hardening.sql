@@ -48,9 +48,6 @@ CREATE INDEX IF NOT EXISTS idx_auth_attempts_key_created
 CREATE INDEX IF NOT EXISTS idx_auth_attempts_created
   ON auth_attempts(created_at);
 
-CREATE INDEX IF NOT EXISTS idx_kyc_status_submitted
-  ON kyc_verifications(status, submitted_at DESC);
-
 ALTER TABLE deposits ADD COLUMN processing_nonce TEXT;
 ALTER TABLE withdrawals ADD COLUMN processing_nonce TEXT;
 

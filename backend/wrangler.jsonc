@@ -15,7 +15,6 @@
       "migrations_dir": "./migrations"
     }
   ],
-  "r2_buckets": [{"binding":"KYC_BUCKET","bucket_name":"capital-kyc-private"}],
   "triggers": {
     "crons": ["30 19 * * *"]
   }

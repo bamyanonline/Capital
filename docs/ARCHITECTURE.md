@@ -12,9 +12,8 @@ Never edit `backend/public/frontend` or `backend/public/admin` directly. Edit th
 ## Cloudflare runtime
 - Worker: `backend/worker.js`
 - D1 binding: `DB`
-- R2 binding: `KYC_BUCKET`
 - Static assets: `backend/public`
 - Scheduled job: configured in `backend/wrangler.jsonc`
 
 ## Data authority
-Financial balances, deposits, withdrawals, KYC status, referral rewards, profit calculations, permissions and security decisions are server-authoritative. Browser storage is not a financial source of truth.
+Financial balances, deposits, withdrawals, referral rewards, profit calculations, permissions and security decisions are server-authoritative. Browser storage is not a financial source of truth.

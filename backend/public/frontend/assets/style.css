@@ -213,31 +213,6 @@ button,input,select,textarea{
 .permanent-warning{margin:9px 0}
 
 
-/* v1: Profile KYC card — isolated to Profile page only. */
-.profile-kyc-upload-title{
-  margin:13px 0 7px;
-  font-size:12px;
-  font-weight:800;
-  color:var(--turq2);
-}
-.profile-section input[type="file"]{
-  width:100%;
-  flex:none;
-  padding:9px;
-  border:1px solid var(--line);
-  border-radius:11px;
-  background:#fff;
-  color:var(--muted);
-  font-size:12px;
-}
-.profile-kyc-status{
-  margin-top:10px;
-  padding-top:11px;
-}
-.profile-kyc-status strong{
-  color:var(--muted);
-}
-
 /* CAPITAL History page — isolated styles */
 .history-page{padding-bottom:105px}
 .history-page .hero{text-align:center;margin-bottom:18px}

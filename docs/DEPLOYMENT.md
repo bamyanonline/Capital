@@ -37,26 +37,18 @@ Check the migration state:
 npx --prefix backend wrangler d1 migrations list capital-prod-db --remote
 ```
 
-## 6. Create the private KYC R2 bucket
-
-```bash
-npx --prefix backend wrangler r2 bucket create capital-kyc-private
-```
-
-Do not make the bucket public.
-
-## 7. Configure production secrets
+## 6. Configure production secrets
 
 Use Cloudflare Worker secrets/environment configuration. Never put real secrets in Git.
 
-## 8. Verify and deploy
+## 7. Verify and deploy
 
 ```bash
 npm run verify
 npm run deploy
 ```
 
-## 9. Future source changes
+## 8. Future source changes
 
 Edit only `frontend/` and `admin/`. Then run:
 

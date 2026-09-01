@@ -1,6 +1,6 @@
 # CAPITAL
 
-CAPITAL is a Cloudflare Worker + D1 + R2 web application with a multilingual customer frontend and a bilingual English/Persian administration panel.
+CAPITAL is a Cloudflare Worker + D1 web application with a multilingual customer frontend and a bilingual English/Persian administration panel.
 
 ## Repository layout
 
@@ -27,7 +27,6 @@ npm run verify
 ## Deploy
 
 1. Create a Cloudflare D1 database and put its real `database_id` in `backend/wrangler.jsonc`.
-2. Create the private R2 bucket used for KYC.
 3. Configure production secrets in Cloudflare.
 4. Apply migrations with `npm run migrate:remote`.
 5. Run `npm run verify`.
@@ -44,7 +43,6 @@ Do not edit `backend/public` directly. It is a deployable synchronized copy. The
 - `docs/ARCHITECTURE.md`
 - `docs/DEPLOYMENT.md`
 - `docs/SECURITY.md`
-- `docs/KYC.md`
 - `docs/FINANCIAL_RULES.md`
 - `docs/BACKEND_HARDENING.md`
 - `docs/releases/V1.md`
